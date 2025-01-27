@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "rmv7nm",
+  "CachePdfKey": "rmv7nm/rmv7nm-6qwdvb.pdf",
+  "CacheInfoKey": "rmv7nm/rmv7nm-6qwdvb.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=\"31 Aralık Çıkış Saati_202501262311.docx\";Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "31 Aralık Çıkış Saati_202501262311.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "31 Aralık Çıkış Saati_202501262311.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

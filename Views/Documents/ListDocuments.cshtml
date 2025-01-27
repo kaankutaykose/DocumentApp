@@ -1,0 +1,60 @@
+﻿@model IEnumerable<DocumentApp.Models.Documents>
+
+@{
+    ViewData["Title"] = "Documents List";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>File Name</th>
+            <th>File Path</th>
+            <th>Version</th>
+            <th>Created Date</th>
+            <th>Modified Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            int count = 1;
+            foreach (var document in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@document.FileName</td>
+                    <td>@document.FilePath</td>
+                    <td>@document.Version</td>
+                    <td>@document.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@document.ModifiedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <form method="post" action="@Url.Action("ViewDocument", "Documents")">
+                            <input type="hidden" name="selectedFileId" value="@document.Id" />
+                            <button type="submit" class="btn btn-primary btn-sm">Details</button>
+                        </form>
+                        <form method="get" action="@Url.Action("UpdateDocument", "Documents")">
+                            <input type="hidden" name="selectedFileId" value="@document.Id" />
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
+
+                        <form method="post" action="@Url.Action("Delete", "Documents")" onsubmit="return confirm('Bu dosyayı silmek istediğinizden emin misiniz?');">
+                            <input type="hidden" name="id" value="@document.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">No documents available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

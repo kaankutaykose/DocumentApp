@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "1d69cbh",
+  "CachePdfKey": "1d69cbh/1d69cbh-xkl4y9.pdf",
+  "CacheInfoKey": "1d69cbh/1d69cbh-xkl4y9.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=acikihale_202501270812.docx;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "acikihale_202501270812.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "acikihale_202501270812.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

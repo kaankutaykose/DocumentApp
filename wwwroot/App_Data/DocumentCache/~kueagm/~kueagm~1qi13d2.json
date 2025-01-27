@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "kueagm",
+  "CachePdfKey": "kueagm/kueagm-1qi13d2.pdf",
+  "CacheInfoKey": "kueagm/kueagm-1qi13d2.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Document.docx;Location=\"Type=Physical;Path=~\\Documents\"",
+  "DocumentFileName": "Document.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "Document.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

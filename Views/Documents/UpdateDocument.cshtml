@@ -1,0 +1,21 @@
+﻿@model DocumentApp.Models.Documents
+
+@{
+    ViewData["Title"] = "Update Document";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="UpdateDocument" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="FileName"></label>
+        <input asp-for="FileName" class="form-control" />
+        <span asp-validation-for="FileName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>File</label>
+        <input type="file" name="file" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

@@ -1,0 +1,44 @@
+﻿@model string
+
+@using GleamTech.AspNet.Core
+@using GleamTech.DocumentUltimate
+@using GleamTech.DocumentUltimate.AspNet
+@using GleamTech.DocumentUltimate.AspNet.UI
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document Viewer</title>
+    <style>
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           
+        }
+    </style>
+</head>
+<body>
+    @{
+        var filePath = ViewData["FilePath"] as string;
+        if (!string.IsNullOrEmpty(filePath))
+        {
+            var documentViewer = new DocumentViewer
+                {
+                    Width = 1080,
+                    Height = 600,   
+                    Document = filePath // Dinamik dosya yolu burada kullanılıyor
+                };
+
+            <div class="center-container">
+				@this.RenderHead(documentViewer)
+				@this.RenderBody(documentViewer)
+            </div>
+        }
+        else
+        {
+            <p>Görüntülenecek bir dosya seçilmedi.</p>
+        }
+    }
+</body>
+</html>

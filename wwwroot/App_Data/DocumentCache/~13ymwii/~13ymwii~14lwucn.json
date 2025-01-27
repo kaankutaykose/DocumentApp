@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "13ymwii",
+  "CachePdfKey": "13ymwii/13ymwii-14lwucn.pdf",
+  "CacheInfoKey": "13ymwii/13ymwii-14lwucn.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=\"AÇIK BELLİ İSTEKLİLER ARASINDA İHALE USULÜ İNŞAAT YAPIM İŞLERİ ÖZEL TEKNİK ŞARTNAME.docx\";Location=\"Type=Physical;Path=~\\Documents\"",
+  "DocumentFileName": "AÇIK BELLİ İSTEKLİLER ARASINDA İHALE USULÜ İNŞAAT YAPIM İŞLERİ ÖZEL TEKNİK ŞARTNAME.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "AÇIK BELLİ İSTEKLİLER ARASINDA İHALE USULÜ İNŞAAT YAPIM İŞLERİ ÖZEL TEKNİK ŞARTNAME.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

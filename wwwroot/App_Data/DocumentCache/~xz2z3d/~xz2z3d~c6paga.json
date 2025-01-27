@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "xz2z3d",
+  "CachePdfKey": "xz2z3d/xz2z3d-c6paga.pdf",
+  "CacheInfoKey": "xz2z3d/xz2z3d-c6paga.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=dahilino_202501270857.docx;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "dahilino_202501270857.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "dahilino_202501270857.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

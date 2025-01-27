@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1bt94u2",
+  "CachePdfKey": "1bt94u2/1bt94u2-1vlzme6.pdf",
+  "CacheInfoKey": "1bt94u2/1bt94u2-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=\"emeklilik yatırım fonu_202501271039.pdf\";Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "emeklilik yatırım fonu_202501271039.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1brgjmj",
+  "CachePdfKey": "1brgjmj/1brgjmj-1tn380r.pdf",
+  "CacheInfoKey": "1brgjmj/1brgjmj-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Rapor_202501261956.png;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "Rapor_202501261956.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}
