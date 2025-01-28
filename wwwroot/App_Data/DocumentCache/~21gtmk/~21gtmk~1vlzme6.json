@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "21gtmk",
+  "CachePdfKey": "21gtmk/21gtmk-1vlzme6.pdf",
+  "CacheInfoKey": "21gtmk/21gtmk-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501271540.pdf;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501271540.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

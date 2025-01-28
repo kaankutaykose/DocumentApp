@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "p7lxus",
+  "CachePdfKey": "p7lxus/p7lxus-1xdsj6h.pdf",
+  "CacheInfoKey": "p7lxus/p7lxus-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501271544.jpg;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501271544.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

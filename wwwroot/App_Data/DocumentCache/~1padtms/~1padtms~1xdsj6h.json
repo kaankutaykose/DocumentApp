@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1padtms",
+  "CachePdfKey": "1padtms/1padtms-1xdsj6h.pdf",
+  "CacheInfoKey": "1padtms/1padtms-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Rapor_202501280847.jpg;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "Rapor_202501280847.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "135x43v",
+  "CachePdfKey": "135x43v/135x43v-1vlzme6.pdf",
+  "CacheInfoKey": "135x43v/135x43v-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501271545.pdf;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501271545.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

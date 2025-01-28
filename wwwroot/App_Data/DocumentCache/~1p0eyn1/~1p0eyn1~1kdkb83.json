@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "1p0eyn1",
+  "CachePdfKey": "1p0eyn1/1p0eyn1-1kdkb83.pdf",
+  "CacheInfoKey": "1p0eyn1/1p0eyn1-1kdkb83.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaancan_202501271430.docx;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\Source\\Repos\\DocumentApp1\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaancan_202501271430.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "kaancan_202501271430.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

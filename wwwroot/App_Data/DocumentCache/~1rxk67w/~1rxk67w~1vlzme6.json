@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1rxk67w",
+  "CachePdfKey": "1rxk67w/1rxk67w-1vlzme6.pdf",
+  "CacheInfoKey": "1rxk67w/1rxk67w-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=deneme123_202501271531.pdf;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "deneme123_202501271531.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

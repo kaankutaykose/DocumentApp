@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1yo6nlk",
+  "CachePdfKey": "1yo6nlk/1yo6nlk-1xdsj6h.pdf",
+  "CacheInfoKey": "1yo6nlk/1yo6nlk-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501280845.jpg;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501280845.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

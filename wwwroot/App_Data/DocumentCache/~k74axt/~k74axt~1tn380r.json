@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "k74axt",
+  "CachePdfKey": "k74axt/k74axt-1tn380r.pdf",
+  "CacheInfoKey": "k74axt/k74axt-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501280843.png;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501280843.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

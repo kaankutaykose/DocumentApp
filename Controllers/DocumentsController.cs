@@ -67,7 +67,7 @@ namespace DocumentApp.Controllers
         {
             // Aktif olan dosyayı bul
             var document = await _dbContext.Documents
-                .FirstOrDefaultAsync(d => d.Id == selectedFileId && d.IsActive);
+                .FirstOrDefaultAsync(d => d.Id == selectedFileId && d.IsActive == true);
 
             if (document == null)
             {
@@ -173,12 +173,12 @@ namespace DocumentApp.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateDocument(Guid id, IFormFile file, string fileName)
         {
-            // Eski dosyayı bul
-            var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == id);
+            // Aktif olan dosyayı bul
+            var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == id && d.IsActive);
 
             if (existingDocument == null)
             {
-                return NotFound("Dosya bulunamadı.");
+                return NotFound("Dosya bulunamadı veya aktif değil.");
             }
 
             // Dosya boyutu kontrolü (20 MB = 20 * 1024 * 1024 bytes)
@@ -212,8 +212,8 @@ namespace DocumentApp.Controllers
             {
                 Id = existingDocument.Id, // Aynı GUID'i kullan
                 FileName = fileName,
-                FilePath = filePath,
-                CreatedDate = DateTime.UtcNow,
+                FilePath = filePath, // Yeni dosya yolu
+                CreatedDate = existingDocument.CreatedDate,
                 ModifiedDate = DateTime.UtcNow,
                 Version = existingDocument.Version + 1, // Versiyonu bir artır
                 IsActive = true
@@ -221,10 +221,10 @@ namespace DocumentApp.Controllers
 
             // Eski dosyanın IsActive değerini false yap
             existingDocument.IsActive = false;
-
+            _dbContext.Documents.Update(existingDocument);
             // Veritabanına yeni dosyayı ekle ve eski dosyayı güncelle
             _dbContext.Documents.Add(newDocument);
-            _dbContext.Documents.Update(existingDocument);
+            
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction("ListDocuments"); // İşlem tamamlandıktan sonra ana sayfaya yönlendir

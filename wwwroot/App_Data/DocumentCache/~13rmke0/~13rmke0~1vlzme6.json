@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "13rmke0",
+  "CachePdfKey": "13rmke0/13rmke0-1vlzme6.pdf",
+  "CacheInfoKey": "13rmke0/13rmke0-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaan_202501271533.pdf;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaan_202501271533.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

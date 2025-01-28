@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "15g55yu",
+  "CachePdfKey": "15g55yu/15g55yu-1tn380r.pdf",
+  "CacheInfoKey": "15g55yu/15g55yu-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501271557.png;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501271557.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

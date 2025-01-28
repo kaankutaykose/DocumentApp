@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "gnumad",
+  "CachePdfKey": "gnumad/gnumad-1vlzme6.pdf",
+  "CacheInfoKey": "gnumad/gnumad-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=ismail_202501271523.pdf;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "ismail_202501271523.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

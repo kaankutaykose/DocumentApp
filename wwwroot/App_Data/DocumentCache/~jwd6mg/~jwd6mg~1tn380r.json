@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "jwd6mg",
+  "CachePdfKey": "jwd6mg/jwd6mg-1tn380r.pdf",
+  "CacheInfoKey": "jwd6mg/jwd6mg-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501271649.png;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "kaandeneme_202501271649.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

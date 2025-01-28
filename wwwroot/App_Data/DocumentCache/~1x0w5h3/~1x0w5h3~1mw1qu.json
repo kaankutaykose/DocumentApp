@@ -1,0 +1,37 @@
+{
+  "CacheSourceKey": "1x0w5h3",
+  "CachePdfKey": "1x0w5h3/1x0w5h3-1mw1qu.pdf",
+  "CacheInfoKey": "1x0w5h3/1x0w5h3-1mw1qu.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Rapor_202501280847.xls;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "Rapor_202501280847.xls",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.SpreadsheetInputOptions, GleamTech.DocumentUltimate",
+    "OutputSheetRange": "visible",
+    "RenderColumnsFitToPages": 1,
+    "RenderRowsFitToPages": 0,
+    "RenderHeadings": false,
+    "RenderGridlines": false,
+    "RenderTitleColumns": null,
+    "RenderTitleRows": null,
+    "RenderArea": null,
+    "RenderBlackAndWhite": false,
+    "RenderCenterHorizontally": false,
+    "RenderCenterVertically": false,
+    "RenderLeftHeader": null,
+    "RenderCenterHeader": null,
+    "RenderRightHeader": null,
+    "RenderLeftFooter": null,
+    "RenderCenterFooter": null,
+    "RenderRightFooter": null,
+    "Format": "Xls",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

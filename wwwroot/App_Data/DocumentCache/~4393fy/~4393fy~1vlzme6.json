@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "4393fy",
+  "CachePdfKey": "4393fy/4393fy-1vlzme6.pdf",
+  "CacheInfoKey": "4393fy/4393fy-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Rapor_202501280848.pdf;Location=\"Type=Physical;Path=C:\\Users\\kaan.kose\\source\\repos\\DocumentApp\\wwwroot\\Documents\"",
+  "DocumentFileName": "Rapor_202501280848.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}
