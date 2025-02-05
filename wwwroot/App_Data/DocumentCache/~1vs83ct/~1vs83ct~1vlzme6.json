@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1vs83ct",
+  "CachePdfKey": "1vs83ct/1vs83ct-1vlzme6.pdf",
+  "CacheInfoKey": "1vs83ct/1vs83ct-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501281608.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "kaandeneme_202501281608.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

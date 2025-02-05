@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "11a6yj0",
+  "CachePdfKey": "11a6yj0/11a6yj0-1vlzme6.pdf",
+  "CacheInfoKey": "11a6yj0/11a6yj0-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamedcankan_202501310835.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamedcankan_202501310835.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

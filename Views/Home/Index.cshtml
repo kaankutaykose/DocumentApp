@@ -2,7 +2,42 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center">
+        <!-- Ana Başlık -->
+        <h1 class="display-3 text-primary font-weight-bold">Emlak Konut GYO Döküman Sistemi</h1>
+
+        <!-- Alt Başlık -->
+        <p class="lead text-secondary">Gelişmiş döküman yönetim sistemi ile tüm dökümanlarınızı güvenli bir şekilde yönetin ve paylaşın.</p>
+
+        <!-- Şirket Hakkında Bilgi -->
+        <p class="text-muted">Bu sistem, Emlak Konut GYO'nun dökümanlarını kolayca yüklemenizi ve düzenlemenizi sağlar.</p>
+
+        <!-- Anahtar Özellikler -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Dosya Yönetimi</h5>
+                        <p class="card-text">Kolayca dosya yükleyebilir, düzenleyebilir ve silebilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Döküman Arama</h5>
+                        <p class="card-text">Yüklediğiniz dökümanları hızlıca arayabilir ve erişebilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Çağrı Yapma (Call to Action) -->
+        <div class="mt-5">
+            <a href="@Url.Action("ListDocuments", "Documents")" class="btn btn-primary btn-lg px-4 py-2">
+                Hemen Başlayın
+            </a>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "g85tut",
+  "CachePdfKey": "g85tut/g85tut-1xdsj6h.pdf",
+  "CacheInfoKey": "g85tut/g85tut-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=images_202502031043.jpeg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "images_202502031043.jpeg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

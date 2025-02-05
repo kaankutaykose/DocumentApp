@@ -1,0 +1,59 @@
+﻿@model DocumentApp.Models.Topic
+@{
+    ViewData["Title"] = "View Topic";
+}
+
+
+
+<div>
+    <h4>@Model.Title</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Html.Raw(Model.Description)</dd>
+
+        <dt class="col-sm-2">Created Date</dt>
+        <dd class="col-sm-10">@Model.CreatedDate</dd>
+
+        <dt class="col-sm-2">Modified Date</dt>
+        <dd class="col-sm-10">@Model.ModifiedDate</dd>
+    </dl>
+</div>
+
+@if (Model.Documents != null && Model.Documents.Any())
+{
+    <h4>Documents</h4>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Version</th>
+                <th>Created Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var document in Model.Documents)
+            {
+                <tr>
+                    <td>@document.FileName</td>
+                    <td>@document.Version</td>
+                    <td>@document.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                            <!-- Detay Butonu -->
+                            <form method="post" action="@Url.Action("ViewDocument", "Documents")" class="d-inline">
+                                <input type="hidden" name="selectedFileId" value="@document.Id" />
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Detaylar
+                                </button>
+                            </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No documents found for this topic.</p>
+}

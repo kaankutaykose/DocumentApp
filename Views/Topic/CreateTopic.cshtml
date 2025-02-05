@@ -1,0 +1,188 @@
+﻿@model DocumentApp.Models.Topic
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yeni Konu Oluştur</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4 rounded">
+            <h2 class="text-center mb-4">Yeni Konu Oluştur</h2>
+
+            <!-- Dosya Yükleme Formu -->
+            <form id="topicForm" enctype="multipart/form-data" method="post">
+                <!-- Konu Başlığı -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Konu Başlığı:</label>
+                    <input type="text" name="Title" class="form-control" placeholder="Başlığı giriniz..." required />
+                </div>
+
+                <!-- Açıklama -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Açıklama:</label>
+                    <textarea name="Description" id="editor" class="form-control"></textarea>
+                </div>
+
+                <!-- Birim Seçimi -->
+                <div class="mb-3">
+                    <label for="unitId" class="form-label fw-bold">Birim Seçiniz:</label>
+                    <select id="unitId" name="unitId" class="form-select">
+                        @foreach (var unit in ViewBag.Unit as IEnumerable<DocumentApp.Models.Unit>)
+                        {
+                            <option value="@unit.UnitId">@unit.UnitName</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Ekler (Dosya Yükleme) -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Ekler:</label>
+                    <input type="file" id="fileInput" name="files" multiple class="form-control" />
+                    <!-- Seçilen dosyaların listeleneceği alan -->
+                    <ul id="fileList" class="list-group mt-2"></ul>
+                </div>
+
+                <!-- Buton -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-4 py-2">
+                        <i class="fas fa-plus-circle"></i> Konu Oluştur
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Başarı Pop-Up Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Başarı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-check-circle text-success" style="font-size: 50px;"></i>
+                    <p class="mt-3">Konu başarıyla oluşturuldu!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tamam</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CKEditor ve jQuery -->
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // CKEditor'ı başlat
+        CKEDITOR.replace('editor', { removePlugins: 'securewarning' });
+
+        // Seçilen dosyaları saklamak için dizi
+        let selectedFiles = [];
+
+        // Dosya inputu değiştiğinde, selectedFiles dizisini güncelle ve dosya listesini oluştur
+        $('#fileInput').on('change', function () {
+            selectedFiles = Array.from(this.files);
+            updateFileList();
+        });
+
+        // Dosya listesini güncelleyen fonksiyon
+        function updateFileList() {
+            const fileList = $('#fileList');
+            fileList.empty(); // Eski listeyi temizle
+            selectedFiles.forEach((file, index) => {
+                const listItem = `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>${file.name}</span>
+                        <button type="button" class="btn btn-danger btn-sm remove-file" data-index="${index}">
+                            <i class="fas fa-trash-alt"></i> Sil
+                        </button>
+                    </li>
+                `;
+                fileList.append(listItem);
+            });
+        }
+
+        // "Sil" butonuna tıklandığında ilgili dosyayı selectedFiles dizisinden çıkar
+        $(document).on('click', '.remove-file', function () {
+            const index = $(this).data('index');
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        });
+
+        // Form gönderiminde AJAX ile verileri gönder
+        $('#topicForm').on('submit', function (event) {
+            event.preventDefault(); // Formun varsayılan gönderimini engelle
+
+            // CKEditor içeriğini al ve formData'ya ekle
+            const editorContent = CKEDITOR.instances.editor.getData();
+            const formData = new FormData(this);
+            formData.set('Description', editorContent);
+
+            // Unit seçimini ekle (combobox'tan)
+            formData.set('unitId', $('#unitId').val());
+
+            // Dosya boyutunu kontrol et (20MB limiti)
+            const files = $('#fileInput')[0].files;
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].size > 20 * 1024 * 1024) {
+                    alert(`Dosya boyutu 20MB'den büyük olamaz: ${files[i].name}`);
+                    return;
+                }
+            }
+
+            // Dikkat: Aşağıdaki satırı kaldırdık çünkü new FormData(this) zaten dosyaları içeriyor
+            // selectedFiles.forEach(file => { formData.append('files', file); });
+
+            $.ajax({
+                url: '/Topic/CreateTopic', // Gerekirse URL'yi güncelleyin
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Başarılı ise, modalı göster
+                        $('#successModal').modal('show');
+                        // Formu sıfırla
+                        $('#topicForm')[0].reset();
+                        CKEDITOR.instances.editor.setData('');
+                        selectedFiles = [];
+                        updateFileList();
+                    } else {
+                        alert(response.message || 'Bir hata oluştu.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let errorMessage = 'Bir hata oluştu: ';
+                    if (xhr.responseText) {
+                        try {
+                            const resp = JSON.parse(xhr.responseText);
+                            errorMessage += resp.message || xhr.responseText;
+                        } catch (e) {
+                            errorMessage += xhr.responseText;
+                        }
+                    } else {
+                        errorMessage += error;
+                    }
+                    alert(errorMessage);
+                    console.error('XHR:', xhr);
+                    console.error('Status:', status);
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

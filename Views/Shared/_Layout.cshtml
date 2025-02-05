@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DocumentApp.styles.css" asp-append-version="true" />
+    
+
 </head>
 <body>
     <header>
@@ -21,13 +23,19 @@
                     <ul class="navbar-nav flex-grow-1">
                        
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="ListDocuments">List Documents</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="ListDocuments">Dökümanları Listele</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="AddFile">Add File</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="AddFile">Döküman Yükle</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="ViewDocument">View Document</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="CreateTopic">Konu Aç</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="ListTopic">Konuları Listele(Admin)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="TopicList">Konuları Listele(User)</a>
                         </li>
                     </ul>
                 </div>

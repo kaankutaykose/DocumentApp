@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "1sy25nn",
+  "CachePdfKey": "1sy25nn/1sy25nn-aw2wnr.pdf",
+  "CacheInfoKey": "1sy25nn/1sy25nn-aw2wnr.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=\"Yeni Microsoft Word Belgesi_202502031103.docx\";Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Yeni Microsoft Word Belgesi_202502031103.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "Yeni Microsoft Word Belgesi_202502031103.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

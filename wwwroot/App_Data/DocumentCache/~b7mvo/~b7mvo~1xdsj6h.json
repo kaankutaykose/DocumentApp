@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "b7mvo",
+  "CachePdfKey": "b7mvo/b7mvo-1xdsj6h.pdf",
+  "CacheInfoKey": "b7mvo/b7mvo-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamed_202501310829.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamed_202501310829.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1d11jc6",
+  "CachePdfKey": "1d11jc6/1d11jc6-1tn380r.pdf",
+  "CacheInfoKey": "1d11jc6/1d11jc6-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=burhan_202501291500.png;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "burhan_202501291500.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

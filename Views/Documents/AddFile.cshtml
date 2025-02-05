@@ -6,23 +6,129 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dosya Yükleme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div>
-        <h2>Dosya Yükleme</h2>
-        <form asp-action="AddFile" asp-controller="Documents" method="post" enctype="multipart/form-data">
-            <div>
-                <label for="fileName">Dosya Adı:</label>
-                <input type="text" id="fileName" name="fileName" required />
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Dosya Yükleme</h2>
+
+        <!-- Dosya Yükleme Formu -->
+        <form id="fileUploadForm" asp-action="AddFile" asp-controller="Documents" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="description" class="form-label">Açıklama:</label>
+                <input type="text" id="description" name="description" class="form-control" />
             </div>
-            <div>
-                <label for="file">Dosya Seç:</label>
-                <input type="file" id="file" name="file" required />
+
+            <!-- Unit Seçimi (Combobox) -->
+            <div class="mb-3">
+                <label for="unitId" class="form-label">Birim Seçiniz:</label>
+                <select id="unitId" name="unitId" class="form-select">
+                    @foreach (var unit in ViewBag.Unit)
+                    {
+                        <option value="@unit.UnitId">@unit.UnitName</option>
+                    }
+                </select>
             </div>
-            <div>
-                <button type="submit">Yükle</button>
+
+            <div class="mb-3">
+                <label for="file" class="form-label">Dosya Seç (Çoklu):</label>
+                <input type="file" id="file" name="files" class="form-control" multiple required />
+            </div>
+            <div class="mb-3" id="fileList">
+                <!-- Yüklenen dosyalar burada gösterilecek -->
+            </div>
+
+            <!-- Yükle Butonu -->
+            <div class="sticky-bottom">
+                <button type="submit" class="btn btn-primary w-100">Yükle</button>
             </div>
         </form>
     </div>
+
+    <!-- Başarı Pop-Up -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content text-center">
+                <div class="modal-body py-5">
+                    <i class="fas fa-check-circle fa-5x text-success mb-4"></i> <!-- İkon -->
+                    <h5 class="modal-title" id="successModalLabel">Başarılı!</h5>
+                    <p>Dosya başarıyla yüklendi!</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap ve jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let selectedFiles = []; // Seçilen dosyaların listesi
+
+        // Dosya seçildiğinde listeyi güncelle
+        $('#file').on('change', function () {
+            selectedFiles = Array.from(this.files); // Dosya listesini kaydet
+            updateFileList();
+        });
+
+        // Seçili dosyaları listele
+        function updateFileList() {
+            var fileListDiv = $('#fileList');
+            fileListDiv.empty();  // Eski dosya listesini temizle
+
+            selectedFiles.forEach((file, index) => {
+                var fileItem = `
+                    <div class="file-item d-flex justify-content-between align-items-center mb-2">
+                        <span>${file.name}</span>
+                        <button type="button" class="btn btn-danger btn-sm remove-file" data-index="${index}">
+                            <i class="fas fa-trash-alt"></i> Sil
+                        </button>
+                    </div>
+                `;
+                fileListDiv.append(fileItem);
+            });
+        }
+
+        // Silme butonuna tıklandığında dosyayı kaldır
+        $(document).on('click', '.remove-file', function () {
+            var index = $(this).data('index');
+            selectedFiles.splice(index, 1); // Listeden çıkar
+            updateFileList();
+        });
+
+        // Formu gönderirken dosya listesini ve unit bilgisini güncelle ve sunucuya gönder
+        $('#fileUploadForm').on('submit', function (event) {
+            event.preventDefault(); // Formun normal gönderimini engelle
+            var formData = new FormData();
+
+            formData.append('description', $('#description').val());
+            formData.append('unitId', $('#unitId').val()); // Unit seçimini ekle
+
+            // Güncellenmiş dosya listesini FormData'ya ekle
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+
+            // AJAX ile formu gönder
+            $.ajax({
+                url: '/Documents/AddFile',  // Formun gönderileceği URL
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // Yükleme başarılı olduğunda pop-up'ı göster
+                    $('#successModal').modal('show');
+                },
+                error: function () {
+                    alert('Dosya yüklenirken bir hata oluştu.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

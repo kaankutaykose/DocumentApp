@@ -1,0 +1,186 @@
+﻿@model IEnumerable<DocumentApp.Models.Topic>
+
+@{
+    ViewData["Title"] = "Konu Listesi";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded">
+        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+        
+
+        <table class="table table-hover table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width:40px;">
+                        <!-- Tümünü Seç checkbox'ı -->
+                        <input type="checkbox" id="selectAll" />
+                    </th>
+                    <th>#</th>
+                    <th>Konu Başlığı</th>
+                    <th>Açıklama</th>
+                    <th>Oluşturulma Tarihi</th>
+                    <th>Değiştirilme Tarihi</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    int count = 1;
+                    foreach (var topic in Model)
+                    {
+                        <tr>
+                            <td>
+                                <!-- Her konunun seçilebilmesi için checkbox -->
+                                <input type="checkbox" class="topic-checkbox" value="@topic.TopicId" />
+                            </td>
+                            <td>@count</td>
+                            <td>@topic.Title</td>
+                            <td class="description-cell">@Html.Raw(topic.Description)</td>
+                            <td>@topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@topic.ModifiedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <!-- Detay Butonu -->
+                                    <form method="post" action="@Url.Action("ViewTopic", "Topic")" class="d-inline">
+                                        <input type="hidden" name="selectedTopicId" value="@topic.TopicId" />
+                                        <button type="submit" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> Detaylar
+                                        </button>
+                                    </form>
+
+                                    <!-- Güncelleme Butonu -->
+                                    <form method="get" action="@Url.Action("UpdateTopic", "Topic")" class="d-inline">
+                                        <input type="hidden" name="selectedFileId" value="@topic.TopicId" />
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Güncelle
+                                        </button>
+                                    </form>
+
+                                    <!-- Tekli Silme Butonu (AJAX ile çalışacak) -->
+                                    <form class="deleteTopicForm d-inline" action="@Url.Action("DeleteTopic", "Topic")" method="post">
+                                        <input type="hidden" name="id" value="@topic.TopicId" />
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Sil
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">Konu bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <!-- Toplu silme butonu -->
+        <div class="mb-3">
+            <button id="bulkDeleteButton" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i> Seçilenleri Sil
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Başarı</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-check-circle text-success" style="font-size: 50px;"></i>
+                <p class="mt-3" id="successMessage">İşlem başarıyla tamamlandı!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript: jQuery, AJAX işlemleri -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // "Tümünü Seç" checkbox'ı tüm satır checkboxlarını kontrol eder.
+    $('#selectAll').on('change', function () {
+        $('.topic-checkbox').prop('checked', $(this).prop('checked'));
+    });
+
+    // Tekli silme işlemi (AJAX ile)
+    $('.deleteTopicForm').on('submit', function (e) {
+        e.preventDefault(); // formun normal submit işlemini engelle
+        var form = $(this);
+        if (!confirm('Bu konuyu silmek istediğinizden emin misiniz?'))
+            return;
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    // Modal mesajını güncelle ve göster
+                    $('#successMessage').text(response.message || 'Konu başarıyla silindi.');
+                    $('#successModal').modal('show');
+                    // İşlem başarılı ise ilgili satırı kaldır
+                    form.closest('tr').remove();
+                } else {
+                    alert(response.message || 'Bir hata oluştu.');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Bir hata oluştu: ' + error);
+            }
+        });
+    });
+
+    // Toplu silme işlemi (AJAX ile)
+    $('#bulkDeleteButton').on('click', function () {
+        var selected = [];
+        $('.topic-checkbox:checked').each(function () {
+            selected.push($(this).val());
+        });
+
+        if (selected.length === 0) {
+            alert("Lütfen silmek istediğiniz konuları seçin.");
+            return;
+        }
+
+        if (!confirm("Seçilen konuları silmek istediğinizden emin misiniz?"))
+            return;
+
+        $.ajax({
+            url: '@Url.Action("BulkDeleteTopics", "Topic")',
+            type: 'POST',
+            data: { ids: selected },
+            traditional: true, // dizi verisini doğru göndermek için
+            success: function (response) {
+                if (response.success) {
+                    $('#successMessage').text(response.message || 'Seçilen konular başarıyla silindi.');
+                    $('#successModal').modal('show');
+                    // Seçilen satırları kaldır
+                    $('.topic-checkbox:checked').closest('tr').remove();
+                } else {
+                    alert(response.message || 'Bir hata oluştu.');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Bir hata oluştu: ' + error);
+            }
+        });
+    });
+</script>
+
+<!-- Bootstrap & FontAwesome CDN bağlantıları -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>

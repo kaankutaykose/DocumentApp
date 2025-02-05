@@ -30,9 +30,9 @@ namespace DocumentApp.Controllers
 
         public IActionResult AddFile()
         {
+            ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
             return View();
         }
-
 
         public async Task<IActionResult> ListDocuments()
         {
@@ -44,6 +44,8 @@ namespace DocumentApp.Controllers
             // Sadece aktif (IsActive = true) olan dokümanları getir
             var activeDocuments = await _dbContext.Documents
                 .Where(d => d.IsActive)
+                .Include(d => d.Unit)
+                .OrderByDescending(d => d.ModifiedDate)
                 .ToListAsync();
 
             if (activeDocuments == null)
@@ -123,44 +125,112 @@ namespace DocumentApp.Controllers
             Console.WriteLine("basarili");
             return View();
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> Delete(Guid id) // id parametresi Guid olarak tanımlandı
+        public async Task<IActionResult> Delete(Guid id)
         {
             Console.WriteLine($"Silinecek Dosya ID: {id}"); // Log ekle
 
-            var document = await _dbContext.Documents.FirstOrDefaultAsync(d => d.Id == id);
-            if (document == null)
+            // Silinecek tüm versiyonları al
+            var documents = await _dbContext.Documents.Where(d => d.Id == id).OrderByDescending(d => d.Version).ToListAsync();
+
+            if (documents == null || documents.Count == 0)
             {
                 Console.WriteLine("Dosya bulunamadı."); // Log ekle
                 return NotFound("Dosya bulunamadı.");
             }
 
-            var filePath = document.FilePath;
-            Console.WriteLine($"Dosya Yolu: {filePath}"); // Log ekle
+            // En son versiyonu al
+            var latestDocument = documents.First();
+            Console.WriteLine($"En son versiyon siliniyor: ID={latestDocument.Id}, Version={latestDocument.Version}");
 
+            // Fiziksel dosyayı sil
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", latestDocument.FilePath);
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);
-                Console.WriteLine("Dosya fiziksel olarak silindi."); // Log ekle
+                Console.WriteLine("Dosya fiziksel olarak silindi.");
             }
             else
             {
-                Console.WriteLine("Fiziksel dosya bulunamadı."); // Log ekle
+                Console.WriteLine("Fiziksel dosya bulunamadı.");
             }
 
-            _dbContext.Documents.Remove(document);
+            // En son versiyonu veritabanından kaldır
+            _dbContext.Documents.Remove(latestDocument);
             await _dbContext.SaveChangesAsync();
+
+            // Eğer daha önceki versiyonlar varsa, en güncel olanı aktif hale getir
+            var previousVersion = documents.Skip(1).FirstOrDefault(); // En güncel olanı al (silinen hariç)
+
+            if (previousVersion != null)
+            {
+                previousVersion.IsActive = true;
+                _dbContext.Documents.Update(previousVersion);
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"Bir önceki versiyon aktif yapıldı: ID={previousVersion.Id}, Version={previousVersion.Version}");
+            }
+            else
+            {
+                Console.WriteLine("Bir önceki versiyon bulunamadı.");
+            }
 
             return RedirectToAction("ListDocuments");
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMultiple(List<Guid> ids)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                Console.WriteLine("Silinecek dosya seçilmedi.");
+                return BadRequest("Silinecek dosya seçilmedi.");
+            }
+
+            Console.WriteLine($"Silinecek Dosya ID'leri: {string.Join(", ", ids)}");
+
+            // Veritabanından tüm seçili belgeleri al
+            var documents = await _dbContext.Documents.Where(d => ids.Contains(d.Id)).OrderByDescending(d => d.Version).ToListAsync();
+
+            if (documents == null || documents.Count == 0)
+            {
+                Console.WriteLine("Seçilen dosyalar bulunamadı.");
+                return NotFound("Seçilen dosyalar bulunamadı.");
+            }
+
+            foreach (var document in documents)
+            {
+                // Dosya yolu belirleme ve fiziksel dosyayı silme
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", document.FilePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    Console.WriteLine($"Dosya fiziksel olarak silindi: {filePath}");
+                }
+                else
+                {
+                    Console.WriteLine($"Fiziksel dosya bulunamadı: {filePath}");
+                }
+
+                // Seçili belgeyi veritabanından kaldır
+                _dbContext.Documents.Remove(document);
+            }
+
+            await _dbContext.SaveChangesAsync();
+            Console.WriteLine("Tüm seçili belgeler silindi.");
+
+            return RedirectToAction("ListDocuments");
+        }
+
 
         [HttpGet]
         public IActionResult UpdateDocument(Guid selectedFileId)
         {
             // Seçilen dosyayı veritabanından bul
-            var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == selectedFileId);
-
+            var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == selectedFileId && d.IsActive);
+            ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
             if (existingDocument == null)
             {
                 return NotFound("Dosya bulunamadı.");
@@ -171,114 +241,124 @@ namespace DocumentApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateDocument(Guid id, IFormFile file, string fileName)
+        public async Task<IActionResult> UpdateDocument(Guid id, IFormFile? file, string fileName, string description, int unitId)
         {
-            // Aktif olan dosyayı bul
             var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == id && d.IsActive);
 
             if (existingDocument == null)
             {
-                return NotFound("Dosya bulunamadı veya aktif değil.");
+                return Json(new { success = false, message = "Dosya bulunamadı veya aktif değil." });
             }
 
-            // Dosya boyutu kontrolü (20 MB = 20 * 1024 * 1024 bytes)
             const int maxFileSize = 20 * 1024 * 1024; // 20 MB
 
-            if (file == null || file.Length == 0)
-                return BadRequest("Lütfen bir dosya seçin.");
+            string newFilePath = existingDocument.FilePath; // Varsayılan olarak eski dosya yolu kalır
+            int newVersion = existingDocument.Version;
 
-            if (file.Length > maxFileSize)
-                return BadRequest("Dosya boyutu 20 MB'den büyük olamaz.");
-
-            // Yeni dosya için benzersiz bir dosya adı oluştur
-            var wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            var uploadsFolder = Path.Combine(wwwRootPath, "Documents");
-            Directory.CreateDirectory(uploadsFolder);
-
-            var sanitizedFileName = Path.GetFileNameWithoutExtension(fileName); // Geçersiz karakterlerden arındırma
-            var extension = Path.GetExtension(file.FileName); // Orijinal dosya uzantısı
-            var timestamp = DateTime.Now.ToString("yyyyMMddHHmm"); // YılAyGünSaatDakika
-            var uniqueFileName = $"{sanitizedFileName}_{timestamp}{extension}"; // Kullanıcı adı + zaman damgası + uzantı
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            // Dosyayı kaydet
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            if (file != null && file.Length > 0)
             {
-                await file.CopyToAsync(stream);
+                if (file.Length > maxFileSize)
+                    return Json(new { success = false, message = "Dosya boyutu 20 MB'den büyük olamaz." });
+
+                var wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                var uploadsFolder = Path.Combine(wwwRootPath, "Documents");
+                Directory.CreateDirectory(uploadsFolder);
+
+                var sanitizedFileName = Path.GetFileNameWithoutExtension(fileName);
+                var extension = Path.GetExtension(file.FileName);
+                var timestamp = DateTime.Now.ToString("yyyyMMddHHmm");
+                var uniqueFileName = $"{sanitizedFileName}_{timestamp}{extension}";
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                newFilePath = $"Documents/{uniqueFileName}"; // Yeni dosya yolu
+                newVersion++;
             }
 
-            // Yeni dosya kaydı oluştur
             var newDocument = new Documents
             {
-                Id = existingDocument.Id, // Aynı GUID'i kullan
+                Id = existingDocument.Id,
                 FileName = fileName,
-                FilePath = filePath, // Yeni dosya yolu
+                FilePath = newFilePath, // Eğer yeni dosya yüklenmediyse, eski dosya yolu kalır
+                Description = description, // Açıklama güncellendi
                 CreatedDate = existingDocument.CreatedDate,
-                ModifiedDate = DateTime.UtcNow,
-                Version = existingDocument.Version + 1, // Versiyonu bir artır
-                IsActive = true
+                ModifiedDate = DateTime.Now,
+                Version = newVersion,
+                IsActive = true,
+                UnitId = unitId // Seçilen birim bilgisi kaydediliyor
             };
 
-            // Eski dosyanın IsActive değerini false yap
             existingDocument.IsActive = false;
             _dbContext.Documents.Update(existingDocument);
-            // Veritabanına yeni dosyayı ekle ve eski dosyayı güncelle
             _dbContext.Documents.Add(newDocument);
-            
+
             await _dbContext.SaveChangesAsync();
 
-            return RedirectToAction("ListDocuments"); // İşlem tamamlandıktan sonra ana sayfaya yönlendir
+            return Json(new { success = true, message = "Döküman başarıyla güncellendi." });
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> AddFile(IFormFile file, string fileName, int userId)
+        public async Task<IActionResult> AddFile(List <IFormFile> files, string description, int unitId)
         {
-            // Dosya boyutu kontrolü (20 MB = 20 * 1024 * 1024 bytes)
-            const int maxFileSize = 20 * 1024 * 1024; // 20 MB
-
-            if (file == null || file.Length == 0)
-                return BadRequest("Lütfen bir dosya seçin.");
-
-            if (file.Length > maxFileSize)
-                return BadRequest("Dosya boyutu 20 MB'den büyük olamaz.");
+           
 
             var wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"); // Uygulamanın kök dizinini al
             var uploadsFolder = Path.Combine(wwwRootPath, "Documents"); // wwwroot/Documents klasörü
             Directory.CreateDirectory(uploadsFolder); // Klasör yoksa oluştur
 
-            var sanitizedFileName = Path.GetFileNameWithoutExtension(fileName); // Geçersiz karakterlerden arındırma
-            var extension = Path.GetExtension(file.FileName); // Orijinal dosya uzantısı
-
-            // Benzersiz dosya adı oluşturma (örneğin, zaman damgası ekleniyor)
-            var timestamp = DateTime.Now.ToString("yyyyMMddHHmm"); // YılAyGünSaatDakika
-            var uniqueFileName = $"{sanitizedFileName}_{timestamp}{extension}"; // Kullanıcı adı + zaman damgası + uzantı
-
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            // Dosyayı kaydetme
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            foreach (var file in files)
             {
-                await file.CopyToAsync(stream);
+                 // Dosya boyutu kontrolü (20 MB = 20 * 1024 * 1024 bytes)
+                const int maxFileSize = 20 * 1024 * 1024; // 20 MB
+
+                if (file == null || file.Length == 0)
+                    return BadRequest("Lütfen bir dosya seçin.");
+
+                if (file.Length > maxFileSize)
+                    return BadRequest("Dosya boyutu 20 MB'den büyük olamaz.");
+
+                var sanitizedFileName = Path.GetFileNameWithoutExtension(file.FileName); // Geçersiz karakterlerden arındırma
+                var extension = Path.GetExtension(file.FileName); // Orijinal dosya uzantısı
+
+                // Benzersiz dosya adı oluşturma (örneğin, zaman damgası ekleniyor)
+                var timestamp = DateTime.Now.ToString("yyyyMMddHHmm"); // YılAyGünSaatDakika
+                var uniqueFileName = $"{sanitizedFileName}_{timestamp}{extension}"; // Kullanıcı adı + zaman damgası + uzantı
+
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Dosyayı kaydetme
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Yeni dosya kaydı oluşturma
+                var document = new Documents
+                {
+                    FileName = sanitizedFileName,
+                    FilePath = $"Documents/{uniqueFileName}",
+                    Description = description,
+                    //UserId = userId,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                    Version = 1,
+                    IsActive = true,
+                    UnitId = unitId
+                };
+
+                // Veritabanına ekleme
+                _dbContext.Documents.Add(document);
             }
-
-            // Yeni dosya kaydı oluşturma
-            var document = new Documents
-            {
-                FileName = fileName,
-                FilePath = filePath,
-                //UserId = userId,
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Version = 1,
-                IsActive = true
-            };
-
-            // Veritabanına ekleme
-            _dbContext.Documents.Add(document);
             await _dbContext.SaveChangesAsync();
 
             return Ok("Dosya başarıyla yüklendi.");
-        }
+        } 
 
     }
 }

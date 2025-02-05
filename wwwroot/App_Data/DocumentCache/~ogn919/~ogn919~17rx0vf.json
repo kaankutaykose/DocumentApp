@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "ogn919",
+  "CachePdfKey": "ogn919/ogn919-17rx0vf.pdf",
+  "CacheInfoKey": "ogn919/ogn919-17rx0vf.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501281609.docx;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "kaandeneme_202501281609.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "kaandeneme_202501281609.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1rr93gs",
+  "CachePdfKey": "1rr93gs/1rr93gs-1vlzme6.pdf",
+  "CacheInfoKey": "1rr93gs/1rr93gs-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=kaandeneme_202501290906.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "kaandeneme_202501290906.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

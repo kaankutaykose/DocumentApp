@@ -54,6 +54,9 @@ namespace DocumentApp.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -72,12 +75,73 @@ namespace DocumentApp.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TopicId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
                     b.HasKey("uniqueId");
 
+                    b.HasIndex("TopicId");
+
+                    b.HasIndex("UnitId");
+
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("DocumentApp.Models.Topic", b =>
+                {
+                    b.Property<int>("TopicId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TopicId"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TopicId");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("Topic");
+                });
+
+            modelBuilder.Entity("DocumentApp.Models.Unit", b =>
+                {
+                    b.Property<int>("UnitId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UnitId"));
+
+                    b.Property<string>("UnitName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("UnitId");
+
+                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("DocumentApp.Models.User", b =>
@@ -105,6 +169,35 @@ namespace DocumentApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("DocumentApp.Models.Documents", b =>
+                {
+                    b.HasOne("DocumentApp.Models.Topic", "Topic")
+                        .WithMany("Documents")
+                        .HasForeignKey("TopicId");
+
+                    b.HasOne("DocumentApp.Models.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId");
+
+                    b.Navigation("Topic");
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("DocumentApp.Models.Topic", b =>
+                {
+                    b.HasOne("DocumentApp.Models.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId");
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("DocumentApp.Models.Topic", b =>
+                {
+                    b.Navigation("Documents");
                 });
 #pragma warning restore 612, 618
         }

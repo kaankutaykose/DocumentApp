@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1kt3lis",
+  "CachePdfKey": "1kt3lis/1kt3lis-1vlzme6.pdf",
+  "CacheInfoKey": "1kt3lis/1kt3lis-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Emlak_Konut_GYO_Yapay_Zeka_Teklif_with_logo_202502041155.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Emlak_Konut_GYO_Yapay_Zeka_Teklif_with_logo_202502041155.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

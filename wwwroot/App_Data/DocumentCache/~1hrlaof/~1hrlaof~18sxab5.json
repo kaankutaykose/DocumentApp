@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1hrlaof",
+  "CachePdfKey": "1hrlaof/1hrlaof-18sxab5.pdf",
+  "CacheInfoKey": "1hrlaof/1hrlaof-18sxab5.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Çarşambayı_Sel_Aldı_Sunumu_202501310829.pptx;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Çarşambayı_Sel_Aldı_Sunumu_202501310829.pptx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pptx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "76r757",
+  "CachePdfKey": "76r757/76r757-1ommfz8.pdf",
+  "CacheInfoKey": "76r757/76r757-1ommfz8.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Document_202501291454.docx;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Document_202501291454.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "Document_202501291454.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

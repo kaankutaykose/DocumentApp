@@ -9,6 +9,17 @@ namespace DocumentApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int uniqueId { get; set; }
+
+        public int? TopicId { get; set; }
+
+        [ForeignKey("TopicId")]
+        public Topic Topic { get; set; } // İlişkilendirilmiş konu
+
+        public int? UnitId { get; set; }
+
+        [ForeignKey("UnitId")]
+        public Unit Unit { get; set; } // İlişkilendirilmiş birim
+
         public Guid Id { get; set; } = Guid.NewGuid(); // GUID otomatik atanır.
 
         [Required]
@@ -17,6 +28,8 @@ namespace DocumentApp.Models
         [Required]
         [StringLength(255)]
         public string FileName { get; set; } // Kullanıcı tarafından girilir.
+
+        public string? Description { get; set; }
 
         [Required]
         public string FilePath { get; set; } // Sunucudaki dosya yolu.

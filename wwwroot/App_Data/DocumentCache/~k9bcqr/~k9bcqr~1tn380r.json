@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "k9bcqr",
+  "CachePdfKey": "k9bcqr/k9bcqr-1tn380r.pdf",
+  "CacheInfoKey": "k9bcqr/k9bcqr-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamed_202502031136.png;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamed_202502031136.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

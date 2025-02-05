@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "62u386",
+  "CachePdfKey": "62u386/62u386-1vlzme6.pdf",
+  "CacheInfoKey": "62u386/62u386-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=burhan_202502030924.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "burhan_202502030924.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "10po2qv",
+  "CachePdfKey": "10po2qv/10po2qv-1xdsj6h.pdf",
+  "CacheInfoKey": "10po2qv/10po2qv-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Kaan-Kutay-KÖSE-CV-TR_202501311537.jpeg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Kaan-Kutay-KÖSE-CV-TR_202501311537.jpeg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

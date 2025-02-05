@@ -15,8 +15,28 @@ html {
 html {
   position: relative;
   min-height: 100%;
+  margin:0;
 }
 
+.container {
+    flex: 1;
+    padding-bottom: 60px;  
+}
+main{
+    flex:1;
+}
 body {
+    display:flex;
   margin-bottom: 60px;
+  flex-direction: column;
+}
+footer {
+    flex-shrink: 0;
+}
+
+.description-cell {
+    max-width: 200px; /* Ýstediðiniz geniþliði belirleyin */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

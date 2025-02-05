@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "1li4j6b",
+  "CachePdfKey": "1li4j6b/1li4j6b-1y0gn8q.pdf",
+  "CacheInfoKey": "1li4j6b/1li4j6b-1y0gn8q.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=23c751f8_14551_202502030913.txt;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "23c751f8_14551_202502030913.txt",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "23c751f8_14551_202502030913.txt",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Txt",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

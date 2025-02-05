@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "hrbci1",
+  "CachePdfKey": "hrbci1/hrbci1-1vlzme6.pdf",
+  "CacheInfoKey": "hrbci1/hrbci1-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=53931d36-d2d3-4978-804d-664f11f2e1d6.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "53931d36-d2d3-4978-804d-664f11f2e1d6.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

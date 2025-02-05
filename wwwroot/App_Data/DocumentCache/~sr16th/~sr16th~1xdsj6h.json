@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "sr16th",
+  "CachePdfKey": "sr16th/sr16th-1xdsj6h.pdf",
+  "CacheInfoKey": "sr16th/sr16th-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamed_202502031035.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamed_202502031035.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}
