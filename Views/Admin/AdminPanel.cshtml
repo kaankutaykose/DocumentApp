@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Paneli</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- Sidebar (Menü) -->
+    <aside class="w-64 bg-gradient-to-br from-indigo-600 to-purple-600 text-white p-8">
+      <div class="mb-10">
+        <h2 class="text-3xl font-bold">Panel</h2>
+      </div>
+      <nav>
+        <ul class="space-y-4">
+          <li>
+            <a class="block p-3 rounded-lg hover:bg-indigo-700 transition-colors" href='@Url.Action("UserList", "Admin")'>
+              Kullanıcıları Yönet
+            </a>
+          </li>
+          <li>
+            <a class="block p-3 rounded-lg hover:bg-indigo-700 transition-colors" href='@Url.Action("ListDocuments", "Documents")'>
+              Dökümanları Yönet
+            </a>
+          </li>
+          <li>
+            <a class="block p-3 rounded-lg hover:bg-indigo-700 transition-colors" href='@Url.Action("ListTopic", "Topic")'>
+              Konuları Yönet
+            </a>
+          </li>
+          <li>
+            <a class="block p-3 rounded-lg hover:bg-indigo-700 transition-colors" href='@Url.Action("AddFile", "Documents")'>
+              Döküman Yükle
+            </a>
+          </li>
+          <li>
+            <a class="block p-3 rounded-lg hover:bg-indigo-700 transition-colors" href='@Url.Action("CreateTopic", "Topic")'>
+              Konu Aç
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="flex-1 p-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Kart: Kullanıcı Yönetimi -->
+        <div class="bg-white rounded-xl shadow-xl p-6 transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer" onclick="location.href='@Url.Action("UserList", "Admin")'">
+          <div class="flex items-center">
+            <!-- İkon: Kullanıcı -->
+            <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14v7"></path>
+            </svg>
+            <h3 class="ml-4 text-2xl font-semibold text-gray-800">Kullanıcı Yönetimi</h3>
+          </div>
+          <p class="mt-4 text-gray-600">Kullanıcıları görüntüle, düzenle ve yönet.</p>
+        </div>
+
+        <!-- Kart: Döküman Yönetimi -->
+        <div class="bg-white rounded-xl shadow-xl p-6 transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer" onclick="location.href='@Url.Action("ListDocuments", "Documents")'">
+          <div class="flex items-center">
+            <!-- İkon: Döküman -->
+            <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-3-3v6"></path>
+            </svg>
+            <h3 class="ml-4 text-2xl font-semibold text-gray-800">Döküman Yönetimi</h3>
+          </div>
+          <p class="mt-4 text-gray-600">Sistemdeki dökümanları görüntüle ve yönet.</p>
+        </div>
+
+        <!-- Kart: Döküman Yükle -->
+        <div class="bg-white rounded-xl shadow-xl p-6 transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer" onclick="location.href='@Url.Action("AddFile", "Documents")'">
+          <div class="flex items-center">
+            <!-- İkon: Artı Sembolü -->
+            <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <h3 class="ml-4 text-2xl font-semibold text-gray-800">Döküman Yükle</h3>
+          </div>
+          <p class="mt-4 text-gray-600">Yeni döküman yüklemek için tıklayın.</p>
+        </div>
+
+        <!-- Kart: Konu Yönetimi -->
+        <div class="bg-white rounded-xl shadow-xl p-6 transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer" onclick="location.href='@Url.Action("ListTopic", "Topic")'">
+          <div class="flex items-center">
+            <!-- İkon: Konu -->
+            <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 20l9-5-9-5-9 5 9 5z"></path>
+            </svg>
+            <h3 class="ml-4 text-2xl font-semibold text-gray-800">Konu Yönetimi</h3>
+          </div>
+          <p class="mt-4 text-gray-600">Konuları görüntüle, düzenle ve yönet.</p>
+        </div>
+
+        <!-- Kart: Konu Aç -->
+        <div class="bg-white rounded-xl shadow-xl p-6 transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer" onclick="location.href='@Url.Action("CreateTopic", "Topic")'">
+          <div class="flex items-center">
+            <!-- İkon: Artı Sembolü -->
+            <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <h3 class="ml-4 text-2xl font-semibold text-gray-800">Konu Aç</h3>
+          </div>
+          <p class="mt-4 text-gray-600">Yeni konu oluşturmak için tıklayın.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

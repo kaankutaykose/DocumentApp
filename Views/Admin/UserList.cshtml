@@ -1,9 +1,14 @@
-﻿@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Kullanıcı Listesi";
     var userRoles = ViewBag.UserRoles as Dictionary<string, string>;
 }
+
+
 
 <h2>Kullanıcı Listesi</h2>
 
@@ -20,7 +25,7 @@
         @foreach (var user in Model)
         {
             <tr>
-                <td>@user.UserName</td>
+                <td>@user.FullName</td>
                 <td>@user.Email</td>
                 <td>
                     @if (userRoles.ContainsKey(user.Id))
@@ -35,7 +40,17 @@
                     }
                 </td>
                 <td>
-                    @if (userRoles[user.Id] != "Admin")
+                    @if (userRoles.ContainsKey(user.Id))
+                    {
+                        <form asp-controller="Admin" asp-action="UpdateUserRole" method="post">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <select name="role" class="form-select">
+                            
+                            </select>
+                            <button type="submit" class="btn btn-primary mt-2">Güncelle</button>
+                        </form>
+                    }
+                    else
                     {
                         <form asp-controller="Admin" asp-action="AssignAdminRole" method="post">
                             <input type="hidden" name="userId" value="@user.Id" />

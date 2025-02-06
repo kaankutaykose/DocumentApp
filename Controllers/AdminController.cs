@@ -1,21 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-[Authorize(Roles = "Admin")] // Sadece Admin erişebilir
+ // Sadece Admin erişebilir
 public class AdminController : Controller
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    public AdminController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
     }
 
+    [Authorize(Roles = "Admin")]
+    public IActionResult AdminPanel()
+    {
+        return View();
+    }
+
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UserList()
     {
         var users = _userManager.Users.ToList();
@@ -31,7 +39,7 @@ public class AdminController : Controller
         return View(users);
     }
 
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AssignAdminRole(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
