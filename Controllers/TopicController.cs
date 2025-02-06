@@ -1,7 +1,10 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using DocumentApp.Data;
 using DocumentApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,29 +14,38 @@ namespace DocumentApp.Controllers
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public TopicController(ApplicationDbContext dbContext)
+        public TopicController(ApplicationDbContext dbContext, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         public IActionResult Index()
         {
             return View();
         }
+
         public async Task<IActionResult> TopicList()
-        {
+            {
             var topics = await _dbContext.Topic
                 .OrderByDescending(t => t.ModifiedDate)
                 .ToListAsync();
 
             return View(topics);
         }
+
+
+        [Authorize]
         public IActionResult CreateTopic()
         {
             ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
             return View();
         }
 
+        [Authorize]
         public IActionResult UpdateTopic()
         {
             return View();
@@ -60,31 +72,34 @@ namespace DocumentApp.Controllers
             return View(topic);
         }
 
+        [Authorize]
         public async Task<IActionResult> ListTopic()
         {
-            if (_dbContext == null)
+            var userId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
+            var userRole = User.FindFirstValue(ClaimTypes.Role); // Kullanıcının rollerini al
+
+            IQueryable<DocumentApp.Models.Topic> query = _dbContext.Topic
+                 .Include(t => t.Unit)
+                 .OrderByDescending(t => t.ModifiedDate);
+
+            // Kullanıcı Admin değilse sadece kendi eklediği dökümanları getir
+            if (userRole != "Admin")
             {
-                throw new Exception("_dbContext is null. Check your database connection.");
+                query = query.Where(t => t.UserId == userId);
             }
 
-            
-            var topics = await _dbContext.Topic
-                .OrderByDescending(t => t.ModifiedDate)
-                .ToListAsync();
+            var documents = await query.ToListAsync();
 
-            if (topics == null)
-            {
-                topics = new List<DocumentApp.Models.Topic>();
-                Console.WriteLine("No active documents found. Returning empty list.");
-            }
-
-            return View(topics);
+            return View(documents);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateTopic(Topic topic, List<IFormFile> files, int unitId)
         {
+            var userId = _userManager.GetUserId(User);
             // Seçilen unit bilgisini topic'e atayalım (Topic modelinde UnitId property'si bulunduğunu varsayıyoruz)
+            topic.UserId = userId;
             topic.UnitId = unitId;
             topic.CreatedDate = DateTime.Now;
             topic.ModifiedDate = DateTime.Now;
@@ -125,6 +140,7 @@ namespace DocumentApp.Controllers
                     IsActive = true,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
+                    UserId = userId,
                     UnitId = unitId
                 };
             
@@ -138,32 +154,43 @@ namespace DocumentApp.Controllers
         }
 
 
+        [Authorize]
         [HttpGet]
-        public IActionResult UpdateTopic(int selectedFileId)
+        public IActionResult UpdateTopic(int selectedTopicId)
         {
+            // Giriş yapan kullanıcının ID'sini al
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Kullanıcının rolünü al
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
+
             // Seçilen konuyu veritabanından bul
-            var existingTopic = _dbContext.Topic.FirstOrDefault(t => t.TopicId == selectedFileId);
+            var existingTopic = _dbContext.Topic.FirstOrDefault(t => t.TopicId == selectedTopicId);
 
             if (existingTopic == null)
             {
                 return NotFound("Konu bulunamadı.");
             }
 
-            // Birim listesini ViewBag'e aktaralım (UnitName'e göre sıralayarak)
-            ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
+            // Eğer kullanıcı Admin değilse ve başkasının konusunu düzenlemeye çalışıyorsa 403 Forbidden
+            if (userRole != "Admin" && existingTopic.UserId != userId)
+            {
+                return Forbid(); // 403 Forbidden
+            }
 
-            // Mevcut konu bilgilerini view'e gönder
+            // Admin veya konu sahibi düzenleyebilir, devam edelim
+            ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
             return View(existingTopic);
         }
 
 
 
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateTopic(int id, Topic updatedTopic, List<IFormFile> files, int unitId)
         {
-            // Tüm konuları listeleyelim (debug amaçlı)
-            var allTopics = _dbContext.Topic.ToList();
-            Console.WriteLine($"Toplam konu sayısı: {allTopics.Count}");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Güncellenecek konuyu bul
             var existingTopic = _dbContext.Topic.FirstOrDefault(t => t.TopicId == id);
@@ -176,6 +203,7 @@ namespace DocumentApp.Controllers
             existingTopic.Title = updatedTopic.Title;
             existingTopic.Description = updatedTopic.Description;
             existingTopic.ModifiedDate = DateTime.Now;
+            existingTopic.UserId = userId;
             existingTopic.UnitId = unitId;  // Seçilen birim bilgisi güncelleniyor
 
             // Dosya yükleme işlemi (varsa)
@@ -212,7 +240,8 @@ namespace DocumentApp.Controllers
                         IsActive = true,
                         CreatedDate = DateTime.Now,
                         ModifiedDate = DateTime.Now,
-                        UnitId = unitId
+                        UnitId = unitId,
+                        UserId = userId
                     };
 
                     _dbContext.Documents.Add(document);
@@ -223,6 +252,7 @@ namespace DocumentApp.Controllers
             return Json(new { success = true, message = "Konu başarıyla güncellendi." });
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult DeleteTopic()
         {
@@ -230,6 +260,7 @@ namespace DocumentApp.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteTopic(int id)
         {

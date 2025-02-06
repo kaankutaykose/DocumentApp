@@ -1,0 +1,84 @@
+﻿@using System.IO
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingenviroment
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .img-thumbnail {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+            .img-thumbnail:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+
+            .img-thumbnail img {
+                display: block;
+                object-fit: cover;
+                border-radius: 2px;
+            }
+
+        /* Mobil cihazlar için stil */
+        @@media (max-width: 768px) {
+            .image-gallery {
+                gap: 10px;
+            }
+
+            .img-thumbnail {
+                padding: 5px;
+            }
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            var funcNum = @Html.Raw(Context.Request.Query["CKEditorFuncNum"]);
+
+            $(document).on('click', '.img-thumbnail img', function() {
+                var fileUrl = '/uploads/' + $(this).attr('title');
+                window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+                window.close();
+            });
+
+            $(document).on('mouseover', '.img-thumbnail img', function() {
+                $(this).css('cursor', 'pointer');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="image-gallery">
+        @foreach (var item in ViewBag.fileInfos)
+        {
+            <div class="img-thumbnail">
+                <img src="~/uploads/@item.Name" title="@item.Name" width="120" height="100">
+            </div>
+        }
+    </div>
+</body>
+</html>

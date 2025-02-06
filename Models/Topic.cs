@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 namespace DocumentApp.Models
 {
     public class Topic
@@ -18,7 +19,7 @@ namespace DocumentApp.Models
 
         [ForeignKey("UnitId")]
         public Unit Unit { get; set; } // İlişkilendirilmiş birim
-
+        public string UserId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime ModifiedDate { get; set; } = DateTime.UtcNow;
 

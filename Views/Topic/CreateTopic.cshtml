@@ -81,7 +81,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // CKEditor'ı başlat
-        CKEDITOR.replace('editor', { removePlugins: 'securewarning' });
+        CKEDITOR.replace('editor', {  
+            removePlugins: 'securewarning',
+            filebrowserUploadUrl: '/Home/UploadCKEDITOR',
+            filebrowserBrowseUrl: '/Home/FileBrowserCKEDITOR'
+        });
 
         // Seçilen dosyaları saklamak için dizi
         let selectedFiles = [];

@@ -1,6 +1,9 @@
-﻿using DocumentApp.Data;
+﻿using System.Security.Claims;
+using DocumentApp.Data;
 using DocumentApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +13,14 @@ namespace DocumentApp.Controllers
     {
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public DocumentsController(ApplicationDbContext dbContext)
+        public DocumentsController(ApplicationDbContext dbContext, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // Dosya listesini getirir
@@ -28,34 +35,43 @@ namespace DocumentApp.Controllers
         //    return View(documents);
         //}
 
+        [Authorize]
         public IActionResult AddFile()
         {
             ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
             return View();
         }
 
-        public async Task<IActionResult> ListDocuments()
+        public async Task<IActionResult> DocumentsList()
         {
-            if (_dbContext == null)
-            {
-                throw new Exception("_dbContext is null. Check your database connection.");
-            }
-
-            // Sadece aktif (IsActive = true) olan dokümanları getir
-            var activeDocuments = await _dbContext.Documents
-                .Where(d => d.IsActive)
-                .Include(d => d.Unit)
+            var documents = await _dbContext.Documents
                 .OrderByDescending(d => d.ModifiedDate)
                 .ToListAsync();
 
-            if (activeDocuments == null)
+            return View(documents);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ListDocuments()
+        {
+            var userId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
+            var userRole = User.FindFirstValue(ClaimTypes.Role); // Kullanıcının rollerini al
+
+            IQueryable<DocumentApp.Models.Documents> query = _dbContext.Documents
+                .Include(d => d.Unit)
+                .OrderByDescending(d => d.ModifiedDate);
+
+            // Kullanıcı Admin değilse sadece kendi eklediği dökümanları getir
+            if (userRole != "Admin")
             {
-                activeDocuments = new List<DocumentApp.Models.Documents>();
-                Console.WriteLine("No active documents found. Returning empty list.");
+                query = query.Where(d => d.IsActive && d.UserId == userId);
             }
 
-            return View(activeDocuments);
+            var documents = await query.ToListAsync();
+
+            return View(documents);
         }
+
 
         [HttpGet]
         public IActionResult ViewDocument()
@@ -119,13 +135,15 @@ namespace DocumentApp.Controllers
             return View("ViewDocument");
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Delete()
         {
             Console.WriteLine("basarili");
             return View();
         }
-        
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -180,6 +198,7 @@ namespace DocumentApp.Controllers
 
 
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteMultiple(List<Guid> ids)
         {
@@ -224,10 +243,16 @@ namespace DocumentApp.Controllers
             return RedirectToAction("ListDocuments");
         }
 
-
+        [Authorize]
         [HttpGet]
         public IActionResult UpdateDocument(Guid selectedFileId)
         {
+            // Giriş yapan kullanıcının ID'sini al
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Kullanıcının rolünü al
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
+
             // Seçilen dosyayı veritabanından bul
             var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == selectedFileId && d.IsActive);
             ViewBag.Unit = _dbContext.Unit.OrderBy(u => u.UnitName).ToList();
@@ -236,13 +261,22 @@ namespace DocumentApp.Controllers
                 return NotFound("Dosya bulunamadı.");
             }
 
+            // Eğer kullanıcı Admin değilse ve başkasının konusunu düzenlemeye çalışıyorsa 403 Forbidden
+            if (userRole != "Admin" && existingDocument.UserId != userId)
+            {
+                return Forbid(); // 403 Forbidden
+            }
+
             // Mevcut dosya bilgilerini view'a gönder
             return View(existingDocument);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateDocument(Guid id, IFormFile? file, string fileName, string description, int unitId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var existingDocument = _dbContext.Documents.FirstOrDefault(d => d.Id == id && d.IsActive);
 
             if (existingDocument == null)
@@ -289,6 +323,7 @@ namespace DocumentApp.Controllers
                 ModifiedDate = DateTime.Now,
                 Version = newVersion,
                 IsActive = true,
+                UserId = userId,
                 UnitId = unitId // Seçilen birim bilgisi kaydediliyor
             };
 
@@ -303,10 +338,11 @@ namespace DocumentApp.Controllers
 
 
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddFile(List <IFormFile> files, string description, int unitId)
         {
-           
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"); // Uygulamanın kök dizinini al
             var uploadsFolder = Path.Combine(wwwRootPath, "Documents"); // wwwroot/Documents klasörü
@@ -344,7 +380,7 @@ namespace DocumentApp.Controllers
                     FileName = sanitizedFileName,
                     FilePath = $"Documents/{uniqueFileName}",
                     Description = description,
-                    //UserId = userId,
+                    UserId = userId,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
                     Version = 1,

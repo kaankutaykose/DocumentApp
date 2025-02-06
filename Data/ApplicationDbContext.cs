@@ -1,22 +1,18 @@
 ﻿using DocumentApp.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocumentApp.Data
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions options):base(options) { 
-        
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
         }
-        
-        public DbSet<DocumentApp.Models.Topic> Topic { get; set; }
-        public DbSet<DocumentApp.Models.Documents> Documents { get; set; }
-        public DbSet<DocumentApp.Models.Admin> Admin { get; set; }
-        public DbSet<DocumentApp.Models.User> User { get; set; }
 
-        public DbSet<DocumentApp.Models.Unit> Unit { get; set; }
-
-        
-
+        public DbSet<Topic> Topic { get; set; }
+        public DbSet<Documents> Documents { get; set; }
+        public DbSet<Unit> Unit { get; set; }
     }
 }

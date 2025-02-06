@@ -8,8 +8,6 @@
     <div class="card shadow-lg p-4 rounded">
         <h1 class="text-center mb-4">@ViewData["Title"]</h1>
 
-        
-
         <table class="table table-hover table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
@@ -53,7 +51,7 @@
 
                                     <!-- Güncelleme Butonu -->
                                     <form method="get" action="@Url.Action("UpdateTopic", "Topic")" class="d-inline">
-                                        <input type="hidden" name="selectedFileId" value="@topic.TopicId" />
+                                        <input type="hidden" name="selectedTopicId" value="@topic.TopicId" />
                                         <button type="submit" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i> Güncelle
                                         </button>

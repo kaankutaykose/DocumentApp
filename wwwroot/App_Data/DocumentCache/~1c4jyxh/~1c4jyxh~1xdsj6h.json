@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1c4jyxh",
+  "CachePdfKey": "1c4jyxh/1c4jyxh-1xdsj6h.pdf",
+  "CacheInfoKey": "1c4jyxh/1c4jyxh-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamed_202502060013.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamed_202502060013.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<DocumentApp.Models.Topic>
+﻿@model IEnumerable<DocumentApp.Models.Documents>
 
 @{
-    ViewData["Title"] = "Konu Forum";
+    ViewData["Title"] = "Dökümanlar";
 }
 
 <div class="container mt-5">
@@ -10,23 +10,21 @@
     @if (Model.Any())
     {
         <div class="list-group">
-            @foreach (var topic in Model)
+            @foreach (var document in Model)
             {
-                @using (Html.BeginForm("ViewTopic", "Topic", FormMethod.Post, new { @class = "list-group-item list-group-item-action", style = "text-decoration: none;" }))
+                @using (Html.BeginForm("ViewDocument", "Documents", FormMethod.Post, new { @class = "list-group-item list-group-item-action", style = "text-decoration: none;" }))
                 {
-                    <input type="hidden" name="selectedTopicId" value="@topic.TopicId" />
+                    <input type="hidden" name="selectedFileId" value="@document.Id" />
                     <button type="submit" class="w-100 text-start border-0 bg-transparent p-0">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">@topic.Title</h5>
-                            <small>Eklendi: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")</small>
+                            <h5 class="mb-1">@document.FileName</h5>
+                            <small>Eklendi: @document.CreatedDate.ToString("yyyy-MM-dd")</small>
                         </div>
                         <p class="mb-1">
-                            @Html.Raw(topic.Description.Length > 200
-                                     ? topic.Description.Substring(0, 200) + "..."
-                                     : topic.Description)
+                            @document.Description
                         </p>
-                        <small>Güncellendi: @topic.ModifiedDate.ToString("yyyy-MM-dd HH:mm")</small>
-                        
+                        <small>Güncellendi: @document.ModifiedDate.ToString("yyyy-MM-dd HH:mm")</small>
+
                     </button>
                 }
             }

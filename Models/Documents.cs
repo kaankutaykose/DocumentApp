@@ -20,6 +20,7 @@ namespace DocumentApp.Models
         [ForeignKey("UnitId")]
         public Unit Unit { get; set; } // İlişkilendirilmiş birim
 
+        public string UserId { get; set; }
         public Guid Id { get; set; } = Guid.NewGuid(); // GUID otomatik atanır.
 
         [Required]

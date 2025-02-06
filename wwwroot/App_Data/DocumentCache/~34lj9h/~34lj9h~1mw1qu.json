@@ -1,0 +1,37 @@
+{
+  "CacheSourceKey": "34lj9h",
+  "CachePdfKey": "34lj9h/34lj9h-1mw1qu.pdf",
+  "CacheInfoKey": "34lj9h/34lj9h-1mw1qu.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=\"tuketici fiyat endeksi ve degisim oranlari_202502060810.xls\";Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "tuketici fiyat endeksi ve degisim oranlari_202502060810.xls",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.SpreadsheetInputOptions, GleamTech.DocumentUltimate",
+    "OutputSheetRange": "visible",
+    "RenderColumnsFitToPages": 1,
+    "RenderRowsFitToPages": 0,
+    "RenderHeadings": false,
+    "RenderGridlines": false,
+    "RenderTitleColumns": null,
+    "RenderTitleRows": null,
+    "RenderArea": null,
+    "RenderBlackAndWhite": false,
+    "RenderCenterHorizontally": false,
+    "RenderCenterVertically": false,
+    "RenderLeftHeader": null,
+    "RenderCenterHeader": null,
+    "RenderRightHeader": null,
+    "RenderLeftFooter": null,
+    "RenderCenterFooter": null,
+    "RenderRightFooter": null,
+    "Format": "Xls",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}
