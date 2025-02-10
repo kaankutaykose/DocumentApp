@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1ofl7po",
+  "CachePdfKey": "1ofl7po/1ofl7po-1xdsj6h.pdf",
+  "CacheInfoKey": "1ofl7po/1ofl7po-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=\"tuketici fiyat endeksi ve degisim oranlari_202502070845.jpeg\";Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "tuketici fiyat endeksi ve degisim oranlari_202502070845.jpeg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1ue5dxq",
+  "CachePdfKey": "1ue5dxq/1ue5dxq-1vlzme6.pdf",
+  "CacheInfoKey": "1ue5dxq/1ue5dxq-1vlzme6.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Kaan-Kutay-KÖSE-CV-TR_202502071331.pdf;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Kaan-Kutay-KÖSE-CV-TR_202502071331.pdf",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pdf",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

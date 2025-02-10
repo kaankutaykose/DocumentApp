@@ -81,11 +81,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // CKEditor'ı başlat
-        CKEDITOR.replace('editor', {  
+                CKEDITOR.replace('editor', {
             removePlugins: 'securewarning',
-            filebrowserUploadUrl: '/Home/UploadCKEDITOR',
+            filebrowserUploadUrl: '/Home/UploadCKEDITOR?responseType=json',
             filebrowserBrowseUrl: '/Home/FileBrowserCKEDITOR'
         });
+
 
         // Seçilen dosyaları saklamak için dizi
         let selectedFiles = [];
@@ -141,8 +142,6 @@
                 }
             }
 
-            // Dikkat: Aşağıdaki satırı kaldırdık çünkü new FormData(this) zaten dosyaları içeriyor
-            // selectedFiles.forEach(file => { formData.append('files', file); });
 
             $.ajax({
                 url: '/Topic/CreateTopic', // Gerekirse URL'yi güncelleyin

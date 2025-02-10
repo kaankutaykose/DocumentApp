@@ -1,0 +1,23 @@
+{
+  "CacheSourceKey": "hb1o5s",
+  "CachePdfKey": "hb1o5s/hb1o5s-1nco3fm.pdf",
+  "CacheInfoKey": "hb1o5s/hb1o5s-1nco3fm.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamed_202502071613.docx;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamed_202502071613.docx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.WordProcessingInputOptions, GleamTech.DocumentUltimate",
+    "FieldFileName": "unnamed_202502071613.docx",
+    "UpdateFields": true,
+    "Encoding": null,
+    "Format": "Docx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

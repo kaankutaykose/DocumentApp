@@ -23,17 +23,6 @@ namespace DocumentApp.Controllers
             _signInManager = signInManager;
         }
 
-        // Dosya listesini getirir
-
-        //public async Task<IActionResult> ListDocuments()
-        //{
-        //    var documents = await _dbContext.Documents
-        //        .Where(d => d.IsActive)
-        //        .OrderByDescending(d => d.CreatedDate)
-        //        .ToListAsync();
-
-        //    return View(documents);
-        //}
 
         [Authorize]
         public IActionResult AddFile()
@@ -42,17 +31,38 @@ namespace DocumentApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> DocumentsList()
+        public async Task<IActionResult> DocumentsList(string searchTerm, int? unitId)
         {
-            var documents = await _dbContext.Documents
-                .OrderByDescending(d => d.ModifiedDate)
-                .ToListAsync();
+            // Unit bilgisini de çekmek için Include kullanıyoruz.
+            IQueryable<DocumentApp.Models.Documents> query = _dbContext.Documents
+                .Include(d => d.Unit)
+                .OrderByDescending(d => d.ModifiedDate);
+
+            // Arama: Dosya adı veya açıklama içerisinde arama yap
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(d => d.FileName.Contains(searchTerm) || d.Description.Contains(searchTerm));
+            }
+
+            // Filtreleme: Eğer geçerli bir unitId gönderilmişse, ilgili birime ait dökümanları getir
+            if (unitId.HasValue && unitId.Value > 0)
+            {
+                query = query.Where(d => d.Unit != null && d.Unit.UnitId == unitId.Value);
+            }
+
+            var documents = await query.ToListAsync();
+
+            // View'da form alanlarını doldurmak için arama ve filtre değerlerini ve ayrıca birim listesini ViewBag ile gönderiyoruz.
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.SelectedUnitId = unitId;
+            ViewBag.Units = await _dbContext.Unit.OrderBy(u => u.UnitName).ToListAsync();
 
             return View(documents);
         }
 
+
         [Authorize]
-        public async Task<IActionResult> ListDocuments()
+        public async Task<IActionResult> ListDocuments(string searchTerm, int? unitId)
         {
             var userId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
             var userRole = User.FindFirstValue(ClaimTypes.Role); // Kullanıcının rollerini al
@@ -67,7 +77,24 @@ namespace DocumentApp.Controllers
                 query = query.Where(d => d.IsActive && d.UserId == userId);
             }
 
+            // Arama: Dosya adı veya açıklamada arama yap (küçük büyük harf duyarlılığı için ihtiyaç halinde .ToLower() kullanabilirsiniz)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(d => d.FileName.Contains(searchTerm) || d.Description.Contains(searchTerm));
+            }
+
+            // Filtreleme: Belirli bir birime göre filtreleme (UnitId varsa)
+            if (unitId.HasValue && unitId.Value > 0)
+            {
+                query = query.Where(d => d.Unit.UnitId == unitId.Value);
+            }
+
             var documents = await query.ToListAsync();
+
+            // View'da arama ve filtre değerlerini ve seçim için kullanılacak birim listesini tutmak için ViewBag kullanıyoruz
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.SelectedUnitId = unitId;
+            ViewBag.Units = await _dbContext.Unit.OrderBy(u => u.UnitName).ToListAsync();
 
             return View(documents);
         }
@@ -210,19 +237,28 @@ namespace DocumentApp.Controllers
 
             Console.WriteLine($"Silinecek Dosya ID'leri: {string.Join(", ", ids)}");
 
-            // Veritabanından tüm seçili belgeleri al
-            var documents = await _dbContext.Documents.Where(d => ids.Contains(d.Id)).OrderByDescending(d => d.Version).ToListAsync();
+            // Seçilen grup ID'lerine (d.Id) ait tüm dokümanları gruplandırıyoruz.
+            var documentGroups = await _dbContext.Documents
+                .Where(d => ids.Contains(d.Id))
+                .GroupBy(d => d.Id)
+                .ToListAsync();
 
-            if (documents == null || documents.Count == 0)
+            foreach (var group in documentGroups)
             {
-                Console.WriteLine("Seçilen dosyalar bulunamadı.");
-                return NotFound("Seçilen dosyalar bulunamadı.");
-            }
+                // Grup içindeki dokümanları versiyona göre azalan sırada alıyoruz (en son versiyon ilk)
+                var documents = group.OrderByDescending(d => d.Version).ToList();
+                if (documents == null || documents.Count == 0)
+                {
+                    Console.WriteLine("Dosya bulunamadı.");
+                    continue;
+                }
 
-            foreach (var document in documents)
-            {
-                // Dosya yolu belirleme ve fiziksel dosyayı silme
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", document.FilePath);
+                // En son versiyonu al
+                var latestDocument = documents.First();
+                Console.WriteLine($"En son versiyon siliniyor: ID={latestDocument.Id}, Version={latestDocument.Version}");
+
+                // Fiziksel dosya yolunu belirle ve sil
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", latestDocument.FilePath);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
@@ -233,15 +269,28 @@ namespace DocumentApp.Controllers
                     Console.WriteLine($"Fiziksel dosya bulunamadı: {filePath}");
                 }
 
-                // Seçili belgeyi veritabanından kaldır
-                _dbContext.Documents.Remove(document);
-            }
+                // En son versiyonu veritabanından kaldır
+                _dbContext.Documents.Remove(latestDocument);
+                await _dbContext.SaveChangesAsync();
 
-            await _dbContext.SaveChangesAsync();
-            Console.WriteLine("Tüm seçili belgeler silindi.");
+                // Eğer daha önceki versiyonlar varsa, en güncel olanı aktif hale getir
+                var previousVersion = documents.Skip(1).FirstOrDefault();
+                if (previousVersion != null)
+                {
+                    previousVersion.IsActive = true;
+                    _dbContext.Documents.Update(previousVersion);
+                    await _dbContext.SaveChangesAsync();
+                    Console.WriteLine($"Bir önceki versiyon aktif yapıldı: ID={previousVersion.Id}, Version={previousVersion.Version}");
+                }
+                else
+                {
+                    Console.WriteLine("Bir önceki versiyon bulunamadı.");
+                }
+            }
 
             return RedirectToAction("ListDocuments");
         }
+
 
         [Authorize]
         [HttpGet]

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "tw7pbk",
+  "CachePdfKey": "tw7pbk/tw7pbk-1tn380r.pdf",
+  "CacheInfoKey": "tw7pbk/tw7pbk-1tn380r.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=LOGO_EKGYO_202502070914.png;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "LOGO_EKGYO_202502070914.png",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Png",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

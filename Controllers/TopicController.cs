@@ -28,14 +28,51 @@ namespace DocumentApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> TopicList()
+        public async Task<IActionResult> TopicList(string searchTerm, int? unitId)
+        {
+            IQueryable<DocumentApp.Models.Topic> query = _dbContext.Topic
+                .Include(t => t.Unit) // Birim bilgilerini de çekiyoruz.
+                .OrderByDescending(t => t.ModifiedDate);
+
+            // Arama: Konu başlığı veya açıklama içerisinde arama yap.
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-            var topics = await _dbContext.Topic
-                .OrderByDescending(t => t.ModifiedDate)
-                .ToListAsync();
+                query = query.Where(t => t.Title.Contains(searchTerm) || t.Description.Contains(searchTerm));
+            }
+
+            // Filtreleme: Seçilen birime göre filtreleme yap (unitId değeri varsa)
+            if (unitId.HasValue && unitId.Value > 0)
+            {
+                query = query.Where(t => t.Unit != null && t.Unit.UnitId == unitId.Value);
+            }
+
+            var topics = await query.ToListAsync();
+
+            // Konuyu oluşturan kullanıcıların bilgilerini almak için (Topic modelinizde UserId varsa)
+            var topicUsers = new Dictionary<int, string>();  // Key: TopicId, Value: FullName
+            foreach (var topic in topics)
+            {
+                if (!string.IsNullOrEmpty(topic.UserId))
+                {
+                    var user = await _userManager.FindByIdAsync(topic.UserId);
+                    topicUsers[topic.TopicId] = user?.FullName ?? "Bilinmiyor";
+                }
+                else
+                {
+                    topicUsers[topic.TopicId] = "Bilinmiyor";
+                }
+            }
+
+            // ViewBag'lere ekleyelim
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.SelectedUnitId = unitId;
+            ViewBag.Units = await _dbContext.Unit.OrderBy(u => u.UnitName).ToListAsync();
+            ViewBag.TopicUsers = topicUsers;
 
             return View(topics);
         }
+
+
 
 
         [Authorize]
@@ -73,7 +110,7 @@ namespace DocumentApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ListTopic()
+        public async Task<IActionResult> ListTopic(string searchTerm, int? unitId)
         {
             var userId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
             var userRole = User.FindFirstValue(ClaimTypes.Role); // Kullanıcının rollerini al
@@ -82,16 +119,34 @@ namespace DocumentApp.Controllers
                  .Include(t => t.Unit)
                  .OrderByDescending(t => t.ModifiedDate);
 
-            // Kullanıcı Admin değilse sadece kendi eklediği dökümanları getir
+            // Kullanıcı Admin değilse sadece kendi eklediği konuları getir
             if (userRole != "Admin")
             {
                 query = query.Where(t => t.UserId == userId);
             }
 
-            var documents = await query.ToListAsync();
+            // Arama: Konu başlığı veya açıklama içinde arama yap
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(t => t.Title.Contains(searchTerm) || t.Description.Contains(searchTerm));
+            }
 
-            return View(documents);
+            // Filtreleme: Seçilen birime göre filtrele (Varsayıyoruz ki birim bilgisi Unit üzerinden geliyor)
+            if (unitId.HasValue && unitId.Value > 0)
+            {
+                query = query.Where(t => t.Unit != null && t.Unit.UnitId == unitId.Value);
+            }
+
+            var topics = await query.ToListAsync();
+
+            // View'da form alanlarını doldurmak için arama ve filtre değerlerini, ayrıca mevcut birim listesini ViewBag üzerinden gönderiyoruz.
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.SelectedUnitId = unitId;
+            ViewBag.Units = await _dbContext.Unit.OrderBy(u => u.UnitName).ToListAsync();
+
+            return View(topics);
         }
+
 
         [Authorize]
         [HttpPost]
@@ -273,11 +328,28 @@ namespace DocumentApp.Controllers
                 return Json(new { success = false, message = "Konu bulunamadı." });
             }
 
-            // Önce Documents tablosundaki ilgili kayıtları sil
-            var relatedDocuments = _dbContext.Documents.Where(d => d.TopicId == id);
+            // İlgili konuyla bağlantılı tüm belgeleri al
+            var relatedDocuments = await _dbContext.Documents.Where(d => d.TopicId == id).ToListAsync();
+
+            // Her belge için fiziksel dosyayı sil
+            foreach (var doc in relatedDocuments)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", doc.FilePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    Console.WriteLine($"Dosya fiziksel olarak silindi: {filePath}");
+                }
+                else
+                {
+                    Console.WriteLine($"Fiziksel dosya bulunamadı: {filePath}");
+                }
+            }
+
+            // Belgeleri veritabanından kaldır
             _dbContext.Documents.RemoveRange(relatedDocuments);
 
-            // Şimdi Topic kaydını sil
+            // Konu kaydını sil
             _dbContext.Topic.Remove(topic);
 
             await _dbContext.SaveChangesAsync();
@@ -285,6 +357,7 @@ namespace DocumentApp.Controllers
             return Json(new { success = true, message = "Konu başarıyla silindi." });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> BulkDeleteTopics(int[] ids)
         {
@@ -294,27 +367,42 @@ namespace DocumentApp.Controllers
                 return Json(new { success = false, message = "Hiçbir konu seçilmedi." });
             }
 
-            // Silinecek konuları veritabanından alıyoruz.
+            Console.WriteLine($"Silinecek Konu ID'leri: {string.Join(", ", ids)}");
+
+            // Seçilen konuları al
             var topicsToDelete = _dbContext.Topic.Where(t => ids.Contains(t.TopicId)).ToList();
 
-            // Bu konulara ait dökümanlarda TopicId değeri null yapılıyor.
-            var documentsToUpdate = _dbContext.Documents
+            // Seçilen konulara ait belgeleri al
+            var documentsToDelete = _dbContext.Documents
                 .Where(d => d.TopicId != null && ids.Contains(d.TopicId.Value))
                 .ToList();
 
-            foreach (var document in documentsToUpdate)
+            // Her belge için fiziksel dosyayı sil
+            foreach (var doc in documentsToDelete)
             {
-                document.TopicId = null; // Döküman ile ilişki kesiliyor.
-                _dbContext.Documents.Update(document);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", doc.FilePath);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    Console.WriteLine($"Dosya fiziksel olarak silindi: {filePath}");
+                }
+                else
+                {
+                    Console.WriteLine($"Fiziksel dosya bulunamadı: {filePath}");
+                }
             }
 
-            // Konuları topluca siliyoruz.
+            // Belgeleri veritabanından kaldır
+            _dbContext.Documents.RemoveRange(documentsToDelete);
+
+            // Konuları veritabanından kaldır
             _dbContext.Topic.RemoveRange(topicsToDelete);
 
             await _dbContext.SaveChangesAsync();
 
             return Json(new { success = true, message = "Seçilen konular başarıyla silindi." });
         }
+
 
 
 

@@ -1,0 +1,37 @@
+{
+  "CacheSourceKey": "kdqc56",
+  "CachePdfKey": "kdqc56/kdqc56-193be1p.pdf",
+  "CacheInfoKey": "kdqc56/kdqc56-193be1p.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=97a498f1fcbd4a2d9d39ae06da7a3355_202502070847.xlsx;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "97a498f1fcbd4a2d9d39ae06da7a3355_202502070847.xlsx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "$type": "GleamTech.DocumentUltimate.SpreadsheetInputOptions, GleamTech.DocumentUltimate",
+    "OutputSheetRange": "visible",
+    "RenderColumnsFitToPages": 1,
+    "RenderRowsFitToPages": 0,
+    "RenderHeadings": false,
+    "RenderGridlines": false,
+    "RenderTitleColumns": null,
+    "RenderTitleRows": null,
+    "RenderArea": null,
+    "RenderBlackAndWhite": false,
+    "RenderCenterHorizontally": false,
+    "RenderCenterVertically": false,
+    "RenderLeftHeader": null,
+    "RenderCenterHeader": null,
+    "RenderRightHeader": null,
+    "RenderLeftFooter": null,
+    "RenderCenterFooter": null,
+    "RenderRightFooter": null,
+    "Format": "Xlsx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

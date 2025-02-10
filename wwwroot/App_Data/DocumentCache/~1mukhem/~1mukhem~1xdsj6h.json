@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1mukhem",
+  "CachePdfKey": "1mukhem/1mukhem-1xdsj6h.pdf",
+  "CacheInfoKey": "1mukhem/1mukhem-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=unnamed_202502071612.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "unnamed_202502071612.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

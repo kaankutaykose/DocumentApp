@@ -1,64 +1,158 @@
-﻿@using Microsoft.AspNetCore.Identity
-
+﻿@model IEnumerable<ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Kullanıcı Listesi";
+    // ViewBag.UserRoles: Key => user.Id, Value => rol adı (örneğin "Admin" veya "User")
     var userRoles = ViewBag.UserRoles as Dictionary<string, string>;
 }
 
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded">
+        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
 
+        <!-- Arama ve Filtreleme Formu -->
+        <form method="get" action="@Url.Action("UserList", "Admin")" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" name="searchTerm" class="form-control"
+                           placeholder="Kullanıcı Adı veya Email Ara"
+                           value="@(ViewBag.SearchTerm ?? "")" />
+                </div>
+                <div class="col-md-4">
+                    <select name="roleFilter" class="form-select">
+                        <option value="">Tüm Yetkiler</option>
+                        <option value="Admin" @(ViewBag.SelectedRole == "Admin" ? "selected" : "")>Admin</option>
+                        <option value="User" @(ViewBag.SelectedRole == "User" ? "selected" : "")>User</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Ara
+                    </button>
+                    <a href="@Url.Action("UserList", "Admin")" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> Sıfırla
+                    </a>
+                </div>
+            </div>
+        </form>
+        <!-- /Arama ve Filtreleme Formu -->
 
-<h2>Kullanıcı Listesi</h2>
+        <table class="table table-hover table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
+                    <th>#</th>
+                    <th>Kullanıcı Adı</th>
+                    <th>Email</th>
+                    <th>Yetki</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    int count = 1;
+                    foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="delete-checkbox" value="@user.Id" />
+                            </td>
+                            <td>@count</td>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                @if (userRoles != null && userRoles.ContainsKey(user.Id))
+                                {
+                                    <span class="badge @(userRoles[user.Id] == "Admin" ? "bg-success" : "bg-secondary")">
+                                        @userRoles[user.Id]
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">User</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <!-- Güncelle (Edit) Butonu -->
+                                    <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+                                    <!-- Tekli Silme Butonu -->
+                                    <form method="post" action="@Url.Action("DeleteUser", "Admin")" class="d-inline" onsubmit="return confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?');">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Sil
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">Kullanıcı bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Kullanıcı Adı</th>
-            <th>Email</th>
-            <th>Yetki</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.FullName</td>
-                <td>@user.Email</td>
-                <td>
-                    @if (userRoles.ContainsKey(user.Id))
-                    {
-                        <span class="badge @(userRoles[user.Id] == "Admin" ? "bg-success" : "bg-secondary")">
-                            @userRoles[user.Id]
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">User</span>
-                    }
-                </td>
-                <td>
-                    @if (userRoles.ContainsKey(user.Id))
-                    {
-                        <form asp-controller="Admin" asp-action="UpdateUserRole" method="post">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            <select name="role" class="form-select">
-                            
-                            </select>
-                            <button type="submit" class="btn btn-primary mt-2">Güncelle</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <form asp-controller="Admin" asp-action="AssignAdminRole" method="post">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" class="btn btn-primary">Admin Yap</button>
-                        </form>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <!-- Toplu Silme Butonu -->
+        <div class="mb-3">
+            <button id="bulkDeleteButton" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i> Seçilenleri Sil
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toplu Silme İşlemi için Ayrı Form -->
+<form id="deleteMultipleForm" method="post" action="@Url.Action("BulkDeleteUsers", "Admin")" style="display: none;"></form>
+
+<!-- jQuery ve JavaScript Kodları -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // "Tümünü Seç" checkbox'ı tüm satır checkboxlarını kontrol eder.
+        $("#selectAll").click(function () {
+            $(".delete-checkbox").prop("checked", this.checked);
+        });
+
+        // Toplu silme butonuna tıklama işlemi
+        $("#bulkDeleteButton").on("click", function () {
+            var selected = [];
+            $(".delete-checkbox:checked").each(function () {
+                selected.push($(this).val());
+            });
+
+            if (selected.length === 0) {
+                alert("Lütfen silmek istediğiniz kullanıcıları seçin.");
+                return;
+            }
+
+            if (!confirm("Seçilen kullanıcıları silmek istediğinizden emin misiniz?"))
+                return;
+
+            // Dinamik olarak form oluşturup POST isteği gönder
+            var form = $("#deleteMultipleForm");
+            form.empty();
+            $.each(selected, function (i, id) {
+                form.append($("<input>").attr("type", "hidden").attr("name", "ids").val(id));
+            });
+            form.submit();
+        });
+    });
+</script>
+
+<!-- Bootstrap ve FontAwesome CDN Bağlantıları -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

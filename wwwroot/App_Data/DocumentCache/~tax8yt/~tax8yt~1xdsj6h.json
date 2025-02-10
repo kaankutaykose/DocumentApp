@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "tax8yt",
+  "CachePdfKey": "tax8yt/tax8yt-1xdsj6h.pdf",
+  "CacheInfoKey": "tax8yt/tax8yt-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=images_202502071634.jpeg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "images_202502071634.jpeg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

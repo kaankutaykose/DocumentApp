@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1wcv1al",
+  "CachePdfKey": "1wcv1al/1wcv1al-1xdsj6h.pdf",
+  "CacheInfoKey": "1wcv1al/1wcv1al-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=images_202502071619.jpeg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "images_202502071619.jpeg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

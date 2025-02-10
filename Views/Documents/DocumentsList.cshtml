@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<DocumentApp.Models.Documents>
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Dökümanlar";
@@ -6,6 +7,39 @@
 
 <div class="container mt-5">
     <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+    <!-- Arama ve Filtreleme Formu -->
+    <form method="get" action="@Url.Action("DocumentsList", "Documents")" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <input type="text" name="searchTerm" class="form-control" placeholder="Dosya Adı veya Açıklama Ara" value="@(ViewBag.SearchTerm ?? "")" />
+            </div>
+            <div class="col-md-4">
+                <select name="unitId" class="form-select">
+                    <option value="">Bütün Birimler</option>
+                    @* Inline C# kullanımı ile ilgili sorun yaşamamak için her döngü adımında önceden değişken oluşturduk. *@
+                    @foreach (var unit in (List<DocumentApp.Models.Unit>)ViewBag.Units)
+                    {
+                        var selected = "";
+                        if (ViewBag.SelectedUnitId != null && unit.UnitId == (int)ViewBag.SelectedUnitId)
+                        {
+                            selected = "selected='selected'";
+                        }
+                        <option value="@unit.UnitId" @Html.Raw(selected)>@unit.UnitName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Ara
+                </button>
+                <a href="@Url.Action("DocumentsList", "Documents")" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Sıfırla
+                </a>
+            </div>
+        </div>
+    </form>
+    <!-- /Arama ve Filtreleme Formu -->
 
     @if (Model.Any())
     {
@@ -24,7 +58,6 @@
                             @document.Description
                         </p>
                         <small>Güncellendi: @document.ModifiedDate.ToString("yyyy-MM-dd HH:mm")</small>
-
                     </button>
                 }
             }
@@ -33,7 +66,7 @@
     else
     {
         <div class="alert alert-info">
-            Henüz konu oluşturulmamış.
+            Henüz döküman yüklenmemiş.
         </div>
     }
 </div>

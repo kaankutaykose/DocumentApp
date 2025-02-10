@@ -1,0 +1,48 @@
+﻿@model ApplicationUser
+@using Microsoft.AspNetCore.Identity
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Kullanıcı Güncelle";
+}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded">
+        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+        <form asp-action="EditUser" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="NewPassword" class="form-label">Yeni Şifre</label>
+                <input type="password" id="NewPassword" name="NewPassword" class="form-control" placeholder="Yeni şifre (değiştirmek istemiyorsanız boş bırakın)" />
+            </div>
+            <div class="mb-3">
+                <label for="Role" class="form-label">Yetki</label>
+                <select id="Role" name="Role" class="form-select">
+                    @foreach (var role in (List<string>)ViewBag.Roles)
+                    {
+                        var currentRole = (await UserManager.GetRolesAsync(Model)).FirstOrDefault() ?? "User";
+                        <option value="@role" @(currentRole == role ? "selected" : "")>@role</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+            <a asp-action="UserList" asp-controller="Admin" class="btn btn-secondary">Vazgeç</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

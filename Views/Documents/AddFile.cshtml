@@ -15,9 +15,10 @@
 
         <!-- Dosya Yükleme Formu -->
         <form id="fileUploadForm" asp-action="AddFile" asp-controller="Documents" method="post" enctype="multipart/form-data">
+            
             <div class="mb-3">
                 <label for="description" class="form-label">Açıklama:</label>
-                <input type="text" id="description" name="description" class="form-control" />
+                <input type="text" id="description" name="description" class="form-control" required/>
             </div>
 
             <!-- Unit Seçimi (Combobox) -->
@@ -33,7 +34,7 @@
 
             <div class="mb-3">
                 <label for="file" class="form-label">Dosya Seç (Çoklu):</label>
-                <input type="file" id="file" name="files" class="form-control" multiple required />
+                <input type="file" id="file" name="files" class="form-control" multiple />
             </div>
             <div class="mb-3" id="fileList">
                 <!-- Yüklenen dosyalar burada gösterilecek -->
@@ -71,15 +72,19 @@
 
         // Dosya seçildiğinde listeyi güncelle
         $('#file').on('change', function () {
-            selectedFiles = Array.from(this.files); // Dosya listesini kaydet
+            // Yeni seçilen dosyaları al
+            let newFiles = Array.from(this.files);
+            // Mevcut dosyaların sonuna ekle
+            selectedFiles = selectedFiles.concat(newFiles);
             updateFileList();
+            // Aynı dosya tekrar seçilebilmesi için input'u temizle
+            $(this).val('');
         });
 
         // Seçili dosyaları listele
         function updateFileList() {
             var fileListDiv = $('#fileList');
             fileListDiv.empty();  // Eski dosya listesini temizle
-
             selectedFiles.forEach((file, index) => {
                 var fileItem = `
                     <div class="file-item d-flex justify-content-between align-items-center mb-2">
@@ -100,22 +105,28 @@
             updateFileList();
         });
 
-        // Formu gönderirken dosya listesini ve unit bilgisini güncelle ve sunucuya gönder
+        // Formu gönderirken dosya listesini ve diğer bilgileri güncelle ve sunucuya gönder
         $('#fileUploadForm').on('submit', function (event) {
             event.preventDefault(); // Formun normal gönderimini engelle
-            var formData = new FormData();
 
+            // Eğer seçili dosya yoksa uyarı ver ve gönderimi durdur
+            if (selectedFiles.length === 0) {
+                alert("Lütfen dosya seçin.");
+                return;
+            }
+
+            var formData = new FormData();
             formData.append('description', $('#description').val());
             formData.append('unitId', $('#unitId').val()); // Unit seçimini ekle
 
-            // Güncellenmiş dosya listesini FormData'ya ekle
+            // Seçili dosyaları FormData'ya ekle
             selectedFiles.forEach(file => {
                 formData.append('files', file);
             });
 
             // AJAX ile formu gönder
             $.ajax({
-                url: '/Documents/AddFile',  // Formun gönderileceği URL
+                url: '/Documents/AddFile',  // Dosya yükleme işleminin yapılacağı URL
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -130,5 +141,7 @@
             });
         });
     </script>
+
+
 </body>
 </html>

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "jw5opi",
+  "CachePdfKey": "jw5opi/jw5opi-18sxab5.pdf",
+  "CacheInfoKey": "jw5opi/jw5opi-18sxab5.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Çarşambayı_Sel_Aldı_Sunumu_202502071618.pptx;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Çarşambayı_Sel_Aldı_Sunumu_202502071618.pptx",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Pptx",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}
