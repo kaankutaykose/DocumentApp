@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using DocumentApp.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 namespace DocumentApp.Controllers
 {
     public class AccountController : Controller

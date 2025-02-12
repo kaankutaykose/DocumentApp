@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1bzhp55",
+  "CachePdfKey": "1bzhp55/1bzhp55-1xdsj6h.pdf",
+  "CacheInfoKey": "1bzhp55/1bzhp55-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=fikir2_202502110810.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "fikir2_202502110810.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

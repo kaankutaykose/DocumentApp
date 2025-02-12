@@ -28,32 +28,35 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="ListDocuments">Dökümanları Düzenle</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="DocumentsList">Dökümanları Listele</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="ListDocuments">Dökümanları Düzenle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="DocumentsList">Dökümanları Listele</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Documents" asp-action="AddFile">Döküman Yükle</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="CreateTopic">Konu Aç</a>
                         </li>      
-                            @if(User.IsInRole("Admin")){
-                         <li class="nav-item">
+                        @if(User.IsInRole("Admin")){
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="ListTopic">Konuları Listele(Admin)</a>
-                          </li>
-                            }
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="TopicList">Konuları Listele(User)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Topic" asp-action="ListTopic">Konularım</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPanel">Admin Panel</a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPanel">Admin Panel</a>
+                            </li>
+                        }
                         <partial name="_LoginPartial" />
                     </ul>
                 </div>

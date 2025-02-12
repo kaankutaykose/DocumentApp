@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1dev55b",
+  "CachePdfKey": "1dev55b/1dev55b-1xdsj6h.pdf",
+  "CacheInfoKey": "1dev55b/1dev55b-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=Çarşambayı_Sel_Aldı_Sunumu_202502102321.jpeg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "Çarşambayı_Sel_Aldı_Sunumu_202502102321.jpeg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

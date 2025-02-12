@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "1l74443",
+  "CachePdfKey": "1l74443/1l74443-1xdsj6h.pdf",
+  "CacheInfoKey": "1l74443/1l74443-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=fikir2_202502110809.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "fikir2_202502110809.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

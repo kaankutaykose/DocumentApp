@@ -32,6 +32,11 @@ namespace DocumentApp.Controllers
             return View();
         }
 
+        public IActionResult Services()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<JsonResult> UploadCKEDITOR(IFormFile upload)
         {

@@ -1,0 +1,19 @@
+{
+  "CacheSourceKey": "6nyo8y",
+  "CachePdfKey": "6nyo8y/6nyo8y-1xdsj6h.pdf",
+  "CacheInfoKey": "6nyo8y/6nyo8y-1xdsj6h.json",
+  "CacheCopyKey": null,
+  "Document": "Type=FileSystem;File=fikir3_202502110809.jpg;Location=\"Type=Physical;Path=Documents\"",
+  "DocumentFileName": "fikir3_202502110809.jpg",
+  "DownloadFileName": null,
+  "InputOptions": {
+    "Format": "Jpg",
+    "Password": null
+  },
+  "PdfOutputOptions": {
+    "Watermarks": [],
+    "Password": null,
+    "Attachments": [],
+    "Format": "Pdf"
+  }
+}

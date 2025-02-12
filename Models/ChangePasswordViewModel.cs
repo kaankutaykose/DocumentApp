@@ -4,6 +4,9 @@ namespace DocumentApp.Models
 {
     public class ChangePasswordViewModel
     {
+        [Required]
+        public string Token { get; set; }
+
         [Required(ErrorMessage = "E-posta zorunludur.")]
         [EmailAddress]
         [Display (Name = "E-posta")]

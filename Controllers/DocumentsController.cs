@@ -50,7 +50,10 @@ namespace DocumentApp.Controllers
                 query = query.Where(d => d.Unit != null && d.Unit.UnitId == unitId.Value);
             }
 
-            var documents = await query.ToListAsync();
+            var documents = await query
+                    .GroupBy(d => d.Id)
+                    .Select(g => g.OrderByDescending(d => d.Version).FirstOrDefault())
+                    .ToListAsync();
 
             // View'da form alanlarını doldurmak için arama ve filtre değerlerini ve ayrıca birim listesini ViewBag ile gönderiyoruz.
             ViewBag.SearchTerm = searchTerm;
@@ -64,40 +67,46 @@ namespace DocumentApp.Controllers
         [Authorize]
         public async Task<IActionResult> ListDocuments(string searchTerm, int? unitId)
         {
-            var userId = _userManager.GetUserId(User); // Giriş yapan kullanıcının ID'sini al
-            var userRole = User.FindFirstValue(ClaimTypes.Role); // Kullanıcının rollerini al
+            var userId = _userManager.GetUserId(User);
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
 
             IQueryable<DocumentApp.Models.Documents> query = _dbContext.Documents
                 .Include(d => d.Unit)
                 .OrderByDescending(d => d.ModifiedDate);
 
-            // Kullanıcı Admin değilse sadece kendi eklediği dökümanları getir
+            // Eğer kullanıcı Admin değilse, sadece kendi eklediği aktif dökümanları getir
             if (userRole != "Admin")
             {
                 query = query.Where(d => d.IsActive && d.UserId == userId);
             }
 
-            // Arama: Dosya adı veya açıklamada arama yap (küçük büyük harf duyarlılığı için ihtiyaç halinde .ToLower() kullanabilirsiniz)
+            // Arama: Dosya adı veya açıklamada arama yap
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(d => d.FileName.Contains(searchTerm) || d.Description.Contains(searchTerm));
             }
 
-            // Filtreleme: Belirli bir birime göre filtreleme (UnitId varsa)
+            // Filtreleme: Belirli bir birime göre filtreleme
             if (unitId.HasValue && unitId.Value > 0)
             {
                 query = query.Where(d => d.Unit.UnitId == unitId.Value);
             }
 
-            var documents = await query.ToListAsync();
+            // Aynı döküman grubuna ait kayıtlardan, sadece en yüksek versiyona sahip olanı seçiyoruz.
+            
+            var latestDocuments = await query
+                .GroupBy(d => d.Id)
+                .Select(g => g.OrderByDescending(d => d.Version).FirstOrDefault())
+                .ToListAsync();
 
-            // View'da arama ve filtre değerlerini ve seçim için kullanılacak birim listesini tutmak için ViewBag kullanıyoruz
+            // ViewBag ile arama, filtre değerleri ve birim listesini view'a gönderiyoruz.
             ViewBag.SearchTerm = searchTerm;
             ViewBag.SelectedUnitId = unitId;
             ViewBag.Units = await _dbContext.Unit.OrderBy(u => u.UnitName).ToListAsync();
 
-            return View(documents);
+            return View(latestDocuments);
         }
+
 
 
         [HttpGet]
@@ -124,7 +133,6 @@ namespace DocumentApp.Controllers
         }
 
        
-
 
         // GET metodu ile çalışacak olan yeni bir Action
         [HttpGet]
